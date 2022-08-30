@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Models;
 
+
+
 namespace BusinessLayer;
 public class ProductsBusinessLayer
 {
@@ -17,7 +19,18 @@ public class ProductsBusinessLayer
 
         await this._repoLayer.InsertProductsAsync(product, Imagebyte);
 
+    }
+
+
+    public async Task<ProductDto?> GetProductByIdAsync(Guid productID)
+    {
+        ProductDto? p = await this._repoLayer.GetProductByIdAsync(productID);
+
+        return p;
 
     }
+
+
+
 
 }

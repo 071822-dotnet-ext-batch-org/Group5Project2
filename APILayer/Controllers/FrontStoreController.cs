@@ -23,14 +23,14 @@ public class FrontStoreController : ControllerBase
     }
 
 
-    //This API insert products 
+    //This API will insert products into inventory
     [HttpPost("InsertProductsAsync")]
 
     public async Task<ActionResult> InsertProductsAsync( [FromForm] Products product)
     {
 
           
-         // Get Image
+         // This convert image to byte array
         var image = product.ProductImage;
 
         byte[]? Imagebyte = Array.Empty<byte>();
@@ -43,16 +43,24 @@ public class FrontStoreController : ControllerBase
 
         }
 
-
+        
         await this._PostProduct.InsertProductsAsync(product, Imagebyte);
 
 
         return Ok(new { status = true, message = "Product Posted Successfully" });
 
-    }//EoC
+    }//EoM
 
 
+    //This API will get products by ID
+    [HttpGet("GetProductByIdAsync")]
+    public async Task<ActionResult<ProductDto?>> GetProductByIdAsync(Guid productID)
+    {
+        ProductDto? p = await this._PostProduct.GetProductByIdAsync(productID);
 
+        return Ok(p);
+
+    }//EOM
 
 
 
