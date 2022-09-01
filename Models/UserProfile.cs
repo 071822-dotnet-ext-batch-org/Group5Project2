@@ -14,8 +14,9 @@ namespace Models
         public string? ProfileName { get; set; }
         public string? ProfileAddress { get; set; }
         public string? ProfilePhone { get; set; }
+        public string? ProfileEmail { get; set; }
         public IFormFile? ProfilePicture { get; set; }
-        public Guid fk_UserID { get; set; }
+        public Guid Fk_UserID { get; set; }
 
 
     }

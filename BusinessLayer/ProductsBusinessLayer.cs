@@ -31,6 +31,14 @@ public class ProductsBusinessLayer
 
     }
 
+
+    public async Task RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
+    {
+
+        await this._repoLayer.RegisterAsync(userprofile, UserImagebyte);
+
+    }
+
     //TODO
     public async Task<ProductDto?>GetImageAsync(Guid productID, dynamic Imageproduct)
     {

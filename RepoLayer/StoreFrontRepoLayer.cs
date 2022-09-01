@@ -150,18 +150,19 @@ namespace RepoLayer
 
 
         //Register New Users
-        public async Task<int> Register(UserProfile userprofile, byte[]? UserImagebyte)
+        public async Task<int> RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
         {
-            SqlConnection conn = new SqlConnection(_connectstring["ConnectionStrings:Project2API"]);
-            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Products] (ProductID, ProductName, ProductImage, ProductDetails, ProductPrice, StockDate, Stock)  VALUES (@productID, @productName, @productImage, @productDetails, @productPrice, @stockDate, @stock)", conn))
+            SqlConnection conn = new SqlConnection("Server=tcp:emma1.database.windows.net,1433;Initial Catalog=Project1;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Profiles] (ProfileID, ProfileName, ProfileAddress, ProfilePhone, ProfileEmail, ProductImage, Fk_UserID)  VALUES (@profileID, @profileName, @profileAddress, @profilePhone, @profileEmail, @profileImage, @fk_UserID)", conn))
             {
 
-                command.Parameters.Add("@productID", SqlDbType.UniqueIdentifier).Value = userprofile.ProfileID;
-                command.Parameters.Add("@productName", SqlDbType.VarChar).Value = userprofile.ProfileName;
-                command.Parameters.Add("@productName", SqlDbType.VarChar).Value = userprofile.ProfileAddress;
-                command.Parameters.Add("@productName", SqlDbType.VarChar).Value = userprofile.ProfilePhone;
-                command.Parameters.Add("@productImage", SqlDbType.VarBinary).Value = UserImagebyte;
-                command.Parameters.Add("@productID", SqlDbType.UniqueIdentifier).Value = userprofile.fk_UserID;
+                command.Parameters.Add("@profileID", SqlDbType.UniqueIdentifier).Value = userprofile.ProfileID;
+                command.Parameters.Add("@profileName", SqlDbType.VarChar).Value = userprofile.ProfileName;
+                command.Parameters.Add("@profileAddress", SqlDbType.VarChar).Value = userprofile.ProfileAddress;
+                command.Parameters.Add("@profilePhone", SqlDbType.VarChar).Value = userprofile.ProfilePhone;
+                command.Parameters.Add("@profileEmail", SqlDbType.VarChar).Value = userprofile.ProfileEmail;
+                command.Parameters.Add("@profileImage", SqlDbType.VarBinary).Value = UserImagebyte;
+                command.Parameters.Add("@fk_UserID", SqlDbType.UniqueIdentifier).Value = userprofile.Fk_UserID;
                 
 
                 conn.Open();

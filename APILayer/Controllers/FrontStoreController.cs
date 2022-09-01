@@ -67,7 +67,30 @@ public class FrontStoreController : ControllerBase
 
     }//EOM
 
+     //Register new user profile
+    [HttpPost("RegisterAsync")]
+    public async Task<ActionResult> RegisterAsync([FromForm] UserProfile userprofile)
+    {
 
+        // This convert image to byte array
+        var image = userprofile.ProfilePicture;
+
+        byte[]? UserImagebyte = Array.Empty<byte>();
+
+        if (image != null)
+        {
+            await using var memoryStream = new MemoryStream();
+            await image!.CopyToAsync(memoryStream);
+            UserImagebyte = memoryStream.ToArray();
+
+        }
+
+        await this._PostProduct.RegisterAsync(userprofile, UserImagebyte);
+
+
+        return Ok(new { status = true, message = "Profile Successfully Created" });
+
+    }//EoM
 
 
 
