@@ -4,6 +4,7 @@ using Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.IO.Pipes;
+using System.Drawing;
 
 namespace APILayer.Controllers;
 
@@ -56,7 +57,11 @@ public class FrontStoreController : ControllerBase
     [HttpGet("GetProductByIdAsync")]
     public async Task<ActionResult<ProductDto?>> GetProductByIdAsync(Guid productID)
     {
+        
         ProductDto? p = await this._PostProduct.GetProductByIdAsync(productID);
+
+        //return File(p.ProductImage, "image/png"); 
+
 
         return Ok(p);
 
