@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using System.IO.Pipes;
-using System.Drawing;
+using System.Configuration;
+
 
 namespace APILayer.Controllers;
 
@@ -44,13 +44,26 @@ public class FrontStoreController : ControllerBase
 
         }
 
+
+        Products product1 = await this._PostProduct.InsertProductsAsync(product, Imagebyte);
+
+        if (product1 != null)
+        {
+
+
+            return Ok(new { status = true, message = "Product Posted Successfully" });
+
+        }
+        else
+        {
+
+            return BadRequest("This product already exists in the DataBase.");
+        }
+
         
-        await this._PostProduct.InsertProductsAsync(product, Imagebyte);
-
-
-        return Ok(new { status = true, message = "Product Posted Successfully" });
-
     }//EoM
+
+
 
 
     //This API will get products by ID
@@ -67,7 +80,11 @@ public class FrontStoreController : ControllerBase
 
     }//EOM
 
-     //Register new user profile
+
+
+
+
+    //Register new user profile
     [HttpPost("RegisterAsync")]
     public async Task<ActionResult> RegisterAsync([FromForm] UserProfile userprofile)
     {
@@ -85,44 +102,28 @@ public class FrontStoreController : ControllerBase
 
         }
 
-        await this._PostProduct.RegisterAsync(userprofile, UserImagebyte);
+
+        UserProfile userprofile1 = await this._PostProduct.RegisterAsync(userprofile, UserImagebyte);
+        if (userprofile1 != null)
+        {
 
 
-        return Ok(new { status = true, message = "Profile Successfully Created" });
+            return Ok(new { status = true, message = "Profile Successfully Created" });
 
-    }//EoM
+        }
+        else 
+        { 
 
-
-
-
-
-
-
+           return BadRequest("This user already exists in the DataBase.");
+        }
 
 
-    // private static readonly string[] Summaries = new[]
-    // {
-    //     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    // };
 
-    // private readonly ILogger<WeatherForecastController> _logger;
 
-    // public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    // {
-    //     _logger = logger;
-    // }
+}//EoM
 
-    // [HttpGet(Name = "GetWeatherForecast")]
-    // public IEnumerable<WeatherForecast> Get()
-    // {
-    //     return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-    //     {
-    //         Date = DateTime.Now.AddDays(index),
-    //         TemperatureC = Random.Shared.Next(-20, 55),
-    //         Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-    //     })
-    //     .ToArray();
-    // }
+
+
 
 
 

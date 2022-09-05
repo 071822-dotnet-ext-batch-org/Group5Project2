@@ -8,16 +8,16 @@ using System.Drawing;
 
 namespace Models
 {
-    public class ProductDto
+    public class ProductDto 
     {
         public Guid ProductID { get; set; }
 
         public string? ProductName { get; set; }
 
         //public Image? ProductImage { get; set; }
-        //public byte[]? ProductImage { get; set; }
+        public byte[]? ProductImage { get; set; }
 
-        public string? ProductImage { get; set; }
+        //public string? ProductImage { get; set; }
 
         public string? ProductDetails { get; set; }
 
