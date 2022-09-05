@@ -22,8 +22,11 @@ public class UnitTest
         //Arrange
         Guid guid = Guid.NewGuid();
 
+        ProductDto m = new ProductDto();
 
-        Products m = new Products()
+        m.ProductName = "Bed";
+
+        Products newproduct = new Products()
         {
             ProductID = guid,
             ProductName = "Bed",
@@ -35,12 +38,12 @@ public class UnitTest
         
         //Act
        
-        bool p1 = await this._repoLayer.CheckExisitngProductAsync(m);
+        bool p1 = await this._repoLayer.CheckExisitngProductAsync(newproduct);
 
 
         //Assert
 
-        Assert.True(p1);
+        Assert.AreEqual(null, p1);
 
 
     }
