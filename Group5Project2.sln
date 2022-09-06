@@ -11,12 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoLayer", "RepoLayer\Repo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.StoreFrontAPI", "Tests.StoreFuntionalities\Tests.StoreFrontAPI.csproj", "{7C0B5F4E-54BF-4336-8006-2BCB7B11FF32}"
-	ProjectSection(ProjectDependencies) = postProject
-		{25F67F00-F38B-4B86-9A8A-6136628BF677} = {25F67F00-F38B-4B86-9A8A-6136628BF677}
-		{D4A6AFDD-F4B5-4CB3-8C19-3304A68297C8} = {D4A6AFDD-F4B5-4CB3-8C19-3304A68297C8}
-		{E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F} = {E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.StoreFrontAPI", "Tests.StoreFrontAPI\Tests.StoreFrontAPI.csproj", "{448467C7-14E9-4C14-9133-DB5F5A2C7E51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +35,10 @@ Global
 		{E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3C0E7D6-B20D-4A1C-A7F1-FC21E965113F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C0B5F4E-54BF-4336-8006-2BCB7B11FF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C0B5F4E-54BF-4336-8006-2BCB7B11FF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C0B5F4E-54BF-4336-8006-2BCB7B11FF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C0B5F4E-54BF-4336-8006-2BCB7B11FF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{448467C7-14E9-4C14-9133-DB5F5A2C7E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{448467C7-14E9-4C14-9133-DB5F5A2C7E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{448467C7-14E9-4C14-9133-DB5F5A2C7E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{448467C7-14E9-4C14-9133-DB5F5A2C7E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
