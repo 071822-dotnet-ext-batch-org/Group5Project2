@@ -1,6 +1,7 @@
 ﻿using RepoLayer;
 using Microsoft.AspNetCore.Http;
 using Models;
+using Microsoft.AspNetCore.Components;
 
 namespace BusinessLayer;
 public class ProductsBusinessLayer
@@ -12,12 +13,75 @@ public class ProductsBusinessLayer
         this._repoLayer = new StoreFrontRepoLayer();
     }
 
-    public async Task InsertProductsAsync(Products product, byte[]? Imagebyte)
+
+    //Check for existing product before inserting them
+    public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
+    {
+        bool m = await this._repoLayer.CheckExisitngProductAsync(product);
+
+        if (m)
+        {
+            return null;
+        }
+        else
+        {
+
+            Guid id = Guid.NewGuid();
+
+            Products product1 = await this._repoLayer.InsertProductsAsync(product, Imagebyte); ;
+
+            return product1;
+
+
+        }
+       
+
+    }
+
+
+    //Get product by Product ID
+    public async Task<ProductDto?> GetProductByIdAsync(Guid productID)
+    {
+        ProductDto? p = await this._repoLayer.GetProductByIdAsync(productID);
+
+       
+        return p;
+
+    }
+
+
+    //Check for existing user before they register
+    public async Task<UserProfile> RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
     {
 
-        await this._repoLayer.InsertProductsAsync(product, Imagebyte);
+        bool u = await this._repoLayer.GetUsersByEmailAsync(userprofile);
+
+
+        if (u)
+        {
+            return null;
+        }
+        else 
+        {
+
+            Guid id = Guid.NewGuid();
+
+            UserProfile userprofile1 = await this._repoLayer.RegisterAsync(userprofile, UserImagebyte);
+
+            return userprofile1;
+
+
+        }
+
+
 
 
     }
+
+    
+ 
+
+
+
 
 }

@@ -1,53 +1,91 @@
 ﻿using System.Data.SqlClient;
-using System;
+using Microsoft.Extensions.Configuration;
 using Models;
 using System.Data;
-using Microsoft.AspNetCore.Http;
+
+
 
 
 
 namespace RepoLayer
 {
+
     public class StoreFrontRepoLayer
     {
-       
+        public StoreFrontRepoLayer() { }
 
-        private static readonly SqlConnection conn = new SqlConnection("Server=tcp:emma1.database.windows.net,1433;Initial Catalog=Project1;Persist Security Info=False;User ID=nwaodec79;Password= Magnum_2279;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
-        public async Task<int> InsertProductsAsync(Products product, byte[]? Imagebyte)
+
+        
+
+        public StoreFrontRepoLayer(IConfiguration config)
         {
 
+            _config = config;
+
+        }
+        public IConfiguration _config { get; }
+
+
+        //Insert product into inventory
+        public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
+        {
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Products] (ProductID, ProductName, ProductImage, ProductDetails, ProductPrice, StockDate, Stock)  VALUES (@productID, @productName, @productImage, @productDetails, @productPrice, @stockDate, @stock)", conn))
             {
-                //command.Parameters.AddWithValue("@productID", product.ProductID);
+                
                 command.Parameters.Add("@productID", SqlDbType.UniqueIdentifier).Value = product.ProductID;
-                //command.Parameters.AddWithValue("@productName", product.ProductName);
                 command.Parameters.Add("@productName", SqlDbType.VarChar).Value = product.ProductName;
-                //command.Parameters.AddWithValue("@productImage", product.ProductImage);
                 command.Parameters.Add("@productImage", SqlDbType.VarBinary).Value = Imagebyte;
-                //command.Parameters.AddWithValue("@productDetails", product.ProductDetails);
-                command.Parameters.Add("@productDetails", SqlDbType.VarChar).Value = product.ProductDetails;
-                //command.Parameters.AddWithValue("@productPrice", product.ProductPrice);
-                command.Parameters.Add("@productPrice", SqlDbType.SmallMoney).Value = product.ProductPrice;
-                //command.Parameters.AddWithValue("@stockDate", product.StockDate);
+                command.Parameters.Add("@productDetails", SqlDbType.VarChar).Value = product.ProductDetails; 
+                command.Parameters.Add("@productPrice", SqlDbType.SmallMoney).Value = product.ProductPrice;     
                 command.Parameters.Add("@stockDate", SqlDbType.Date).Value = product.StockDate;
-                //command.Parameters.AddWithValue("@stock", product.Stock);
-                command.Parameters.Add("@stock", SqlDbType.Int).Value = product.Stock;
-
-
+                command.Parameters.Add("@stock", SqlDbType.Int).Value = product.Stock;              
+                
+                
                 conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
 
-                if (ret == 1)
-                {
-                    conn.Close();
-                    return ret;
+                conn.Close();
+                return product;
+            }
+        }//EoM
 
+
+
+        //Check for exisiting products before inserting
+        public async Task<bool> CheckExisitngProductAsync(Products product)
+        {
+            SqlConnection conn = new SqlConnection();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Products WHERE ProductName = @productName", conn))
+            {
+                command.Parameters.AddWithValue("@productName", product.ProductName);
+                conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+
+                    ProductDto m = new ProductDto();
+
+                    m.ProductID = ret.GetGuid(0);
+                    m.ProductName = ret.GetString(1);
+
+                    byte[] Imagebyte2 = (byte[])ret["ProductImage"];
+                    m.ProductImage = Imagebyte2;
+
+                    m.ProductDetails = ret.GetString(3);
+                    m.ProductPrice = (double)ret.GetDecimal(4);
+                    m.StockDate = ret.GetDateTime(5);
+                    m.Stock = ret.GetInt32(6);
+
+                    conn.Close();
+                    return true;
                 }
                 else
                 {
                     conn.Close();
-                    return ret;
+                    return false;
                 }
             }
 
@@ -55,41 +93,120 @@ namespace RepoLayer
 
 
 
-        //public async Task<int> InsertProductsAsync(Guid productID, string? productName, Products pdto, string? productDetails, double? productPrice, DateTime? stockDate, int? stock)
-        //{
+        //Get Product by ID
+
+        public async Task<ProductDto?> GetProductByIdAsync(Guid productID)
+        {
+            //Console.WriteLine("This is a connection test: " + _config.GetSection("ConnectionStrings"));
+
+            SqlConnection conn = new SqlConnection();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Products WHERE ProductID = @productID", conn))
+            {
+                command.Parameters.AddWithValue("@productID", productID);           
+                conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+
+                    ProductDto p = new ProductDto();
+
+                    p.ProductID = ret.GetGuid(0);
+                    p.ProductName = ret.GetString(1);
+
+                    byte[] Imagebyte = (byte[])ret["ProductImage"];
+                    p.ProductImage = Imagebyte;
+
+                    p.ProductDetails = ret.GetString(3);
+                    p.ProductPrice = (double)ret.GetDecimal(4);
+                    p.StockDate = ret.GetDateTime(5);
+                    p.Stock = ret.GetInt32(6);
+
+                    conn.Close();
+                    return p;
+                }
+                else
+                {
+                    conn.Close();
+                    return null;
+                }
+            }
+
+        }//EoM
+
+
+       
+
+        //Register New Users
+        public async Task<UserProfile> RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
+        {
+            SqlConnection conn = new SqlConnection();
+            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Profiles] (ProfileID, ProfileName, ProfileAddress, ProfilePhone, ProfileEmail, ProfilePicture, Fk_UserID)  VALUES (@profileID, @profileName, @profileAddress, @profilePhone, @profileEmail, @profileImage, @fk_UserID)", conn))
+            {
+
+                command.Parameters.Add("@profileID", SqlDbType.UniqueIdentifier).Value = userprofile.ProfileID;
+                command.Parameters.Add("@profileName", SqlDbType.VarChar).Value = userprofile.ProfileName;
+                command.Parameters.Add("@profileAddress", SqlDbType.VarChar).Value = userprofile.ProfileAddress;
+                command.Parameters.Add("@profilePhone", SqlDbType.VarChar).Value = userprofile.ProfilePhone;
+                command.Parameters.Add("@profileEmail", SqlDbType.VarChar).Value = userprofile.ProfileEmail;
+                command.Parameters.Add("@profileImage", SqlDbType.VarBinary).Value = UserImagebyte;
+                command.Parameters.Add("@fk_UserID", SqlDbType.UniqueIdentifier).Value = userprofile.Fk_UserID;
+                
+
+                conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+
+                conn.Close();
+                return userprofile;     
             
-        //    using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Products] (ProductID, ProductName, ProductImage, ProductDetails, ProductPrice, StockDate, Stock)  VALUES (@productID, @productName, @pdto, @productDetails, @productPrice, @stockDate, @stock)", conn))
-        //    {
-        //        command.Parameters.AddWithValue("@productID", productID);
-        //        command.Parameters.AddWithValue("@productName", productName);
-        //        command.Parameters.AddWithValue("@pdto", pdto);
-        //        command.Parameters.AddWithValue("@productDetails", productDetails);
-        //        command.Parameters.AddWithValue("@productPrice", productPrice);
-        //        command.Parameters.AddWithValue("@stockDate", stockDate);
-        //        command.Parameters.AddWithValue("@stock", stock);
+            }
 
-        //        conn.Open();
-        //        int ret = await command.ExecuteNonQueryAsync();
 
-        //        if (ret == 1)
-        //        {
-        //            conn.Close();
-        //            return ret;
+        }//EoM
 
-        //        }
-        //        else
-        //        {
-        //            conn.Close();
-        //            return ret;
-        //        }
-        //    }
 
-        //}//EoM
 
+
+        //Check for exisitng users before registering
+        public async Task<bool> GetUsersByEmailAsync(UserProfile userprofile)
+        {
+            SqlConnection conn = new SqlConnection();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM [dbo].[Profiles] WHERE ProfileEmail = @profileEmail", conn))
+            {
+                UserProfileDto u = new UserProfileDto();
+                command.Parameters.AddWithValue("@profileEmail", userprofile.ProfileEmail);
+                conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+
+                    u.ProfileID = ret.GetGuid(0);
+                    u.ProfileName = ret.GetString(1);
+                    u.ProfileAddress = ret.GetString(2);
+                    u.ProfilePhone = ret.GetString(3);
+                    u.ProfileEmail = ret.GetString(4);
+
+                    byte[] userImagebyte = (byte[])ret["ProfilePicture"];
+                    u.ProfilePicture = userImagebyte;
+                    u.ProfileID = ret.GetGuid(6);
+                    
+                    conn.Close();
+                    return true;
+                }
+                else
+                {
+                    conn.Close();
+                    return false;
+                }
+            }
+
+        }//EoM
 
 
 
     }
+
 }
 
 

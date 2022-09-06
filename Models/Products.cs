@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace Models;
 public class Products
@@ -10,6 +12,8 @@ public class Products
 
     public string? ProductName { get; set; }
 
+    
+    [Required(ErrorMessage = "Pick an Image")]
     public IFormFile? ProductImage { get; set; }
 
     public string? ProductDetails { get; set; }
