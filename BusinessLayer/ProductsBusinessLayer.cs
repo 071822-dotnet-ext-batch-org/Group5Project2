@@ -28,7 +28,7 @@ public class ProductsBusinessLayer
 
             Guid id = Guid.NewGuid();
 
-            Products product1 = await this._repoLayer.InsertProductsAsync(product, Imagebyte); ;
+            Products product1 = await this._repoLayer.InsertProductsAsync(product, Imagebyte); 
 
             return product1;
 

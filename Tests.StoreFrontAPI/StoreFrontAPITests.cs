@@ -1,3 +1,4 @@
+using BusinessLayer;
 using Models;
 using RepoLayer;
 
@@ -40,71 +41,30 @@ namespace Tests.StoreFrontAPI
         }
 
 
-        //[Test]
-        //public async Task ProductsWorksCorrectly()
-        //{
-        //    //Arrange
-        //    Guid guid = Guid.NewGuid();
+        [Test]
+        public async Task ProductsWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
 
-        //    ProductDto m = new ProductDto();
+            Mock_RepoLayer m = new Mock_RepoLayer();
 
-        //    m.ProductName = "Bed";
+            ProductsBusinessLayer pBL = new ProductsBusinessLayer();
 
-        //    Products newproduct = new Products()
-        //    {
-        //        ProductID = guid,
-        //        ProductName = "Bed",
-        //        ProductDetails = "Short bed",
-        //        ProductPrice = 300.99,
-        //        Stock = 100,
-        //    };
+            Products product = new Products( );
+        
 
 
-        //    //Act
+            //Act
 
-        //    bool p1 = await this._repoLayer.CheckExisitngProductAsync(newproduct);
-
-
-        //    //Assert
-
-        //    Assert.True(p1);
-
-        //}
+            List<ProductDto?> productList = await pBL.GetAllProductsAsync();
 
 
+            //Assert
 
-        //[Test]
-        //public async Task RegistrationWorksCorrectly()
-        //{
-        //    //Arrange
-        //    Guid guid = Guid.NewGuid();
+            Assert.IsTrue(true);
 
-        //    UserProfileDto u = new UserProfileDto();
-
-        //    u.ProfileEmail = "ken@yahoo.com";
-
-        //    UserProfile newUser = new UserProfile()
-        //    {
-        //        ProfileID = guid,
-        //        ProfileName = "Jake Chan",
-        //        ProfileAddress = "20 Chan Dr",
-        //        ProfilePhone = "71399999999",
-        //        ProfileEmail = "ken@yahoo.com",
-
-        //    };
-
-
-        //    //Act
-
-        //    bool u1 = await this._repoLayer.GetUsersByEmailAsync(newUser);
-
-
-        //    //Assert
-
-        //    Assert.True(u1);
-
-
-        //}
+        }
 
 
 
