@@ -1,6 +1,8 @@
 using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Models;
 using RepoLayer;
+using System.Drawing;
 
 
 namespace Tests.StoreFrontAPI
@@ -41,30 +43,90 @@ namespace Tests.StoreFrontAPI
         }
 
 
+
         [Test]
-        public async Task ProductsWorksCorrectly()
+        public void InsertproductCartsWorksCorrectly()
         {
             //Arrange
             Guid guid = Guid.NewGuid();
 
-            Mock_RepoLayer m = new Mock_RepoLayer();
-
-            ProductsBusinessLayer pBL = new ProductsBusinessLayer();
-
-            Products product = new Products( );
-        
-
 
             //Act
 
-            List<ProductDto?> productList = await pBL.GetAllProductsAsync();
+            CartsProducts newcartproduct = new CartsProducts()
+            {
+                CartsProductsID = guid,
+                FK_ProductID = guid,
+                FK_CartID = guid,
+
+            };
 
 
             //Assert
 
-            Assert.IsTrue(true);
+            Assert.AreEqual(newcartproduct.CartsProductsID, guid);
 
         }
+
+
+
+
+
+        [Test]
+        public void InsertNewUserWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+
+            //Act
+
+            UserProfile newuser = new UserProfile()
+            {
+                ProfileID = guid,
+                ProfileName = "Ken",
+                ProfileAddress = "20 ken dr",
+                ProfilePhone = "713992867",
+                ProfileEmail = "ken@yahoo.com",
+                Fk_UserID = guid
+
+
+            };
+
+
+            //Assert
+
+            Assert.AreEqual(newuser.ProfileID, guid);
+
+        }
+
+
+     
+
+        //[Test]
+        //public async Task ProductsWorksCorrectly()
+        //{
+        //    //Arrange
+        //    Guid guid = Guid.NewGuid();
+
+        //    Mock_RepoLayer m = new Mock_RepoLayer();
+
+        //    ProductsBusinessLayer pBL = new ProductsBusinessLayer();
+
+        //    Products product = new Products( );
+
+
+
+        //    //Act
+
+        //    List<ProductDto?> productList = await pBL.GetAllProductsAsync();
+
+
+        //    //Assert
+
+        //    Assert.IsTrue(true);
+
+        //}
 
 
 
