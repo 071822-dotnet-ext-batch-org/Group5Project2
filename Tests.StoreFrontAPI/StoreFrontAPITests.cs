@@ -1,5 +1,8 @@
+using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Models;
 using RepoLayer;
+using System.Drawing;
 
 
 namespace Tests.StoreFrontAPI
@@ -14,16 +17,14 @@ namespace Tests.StoreFrontAPI
         }
 
 
-
         [Test]
-        public async Task ProductsWorksCorrectly()
+        public void ProductsInsertWorksCorrectly()
         {
             //Arrange
             Guid guid = Guid.NewGuid();
 
-            ProductDto m = new ProductDto();
 
-            m.ProductName = "Bed";
+            //Act
 
             Products newproduct = new Products()
             {
@@ -35,51 +36,97 @@ namespace Tests.StoreFrontAPI
             };
 
 
-            //Act
-
-            bool p1 = await this._repoLayer.CheckExisitngProductAsync(newproduct);
-
-
             //Assert
 
-            Assert.True(p1);
+            Assert.AreEqual(newproduct.ProductID, guid);
 
         }
 
 
 
         [Test]
-        public async Task RegistrationWorksCorrectly()
+        public void InsertproductCartsWorksCorrectly()
         {
             //Arrange
             Guid guid = Guid.NewGuid();
 
-            UserProfileDto u = new UserProfileDto();
 
-            u.ProfileEmail = "ken@yahoo.com";
+            //Act
 
-            UserProfile newUser = new UserProfile()
+            CartsProducts newcartproduct = new CartsProducts()
             {
-                ProfileID = guid,
-                ProfileName = "Jake Chan",
-                ProfileAddress = "20 Chan Dr",
-                ProfilePhone = "71399999999",
-                ProfileEmail = "ken@yahoo.com",
+                CartsProductsID = guid,
+                FK_ProductID = guid,
+                FK_CartID = guid,
 
             };
 
 
+            //Assert
+
+            Assert.AreEqual(newcartproduct.CartsProductsID, guid);
+
+        }
+
+
+
+
+
+        [Test]
+        public void InsertNewUserWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+
             //Act
 
-            bool u1 = await this._repoLayer.GetUsersByEmailAsync(newUser);
+            UserProfile newuser = new UserProfile()
+            {
+                ProfileID = guid,
+                ProfileName = "Ken",
+                ProfileAddress = "20 ken dr",
+                ProfilePhone = "713992867",
+                ProfileEmail = "ken@yahoo.com",
+                Fk_UserID = guid
+
+
+            };
 
 
             //Assert
 
-            Assert.True(u1);
-
+            Assert.AreEqual(newuser.ProfileID, guid);
 
         }
+
+
+     
+
+        //[Test]
+        //public async Task ProductsWorksCorrectly()
+        //{
+        //    //Arrange
+        //    Guid guid = Guid.NewGuid();
+
+        //    Mock_RepoLayer m = new Mock_RepoLayer();
+
+        //    ProductsBusinessLayer pBL = new ProductsBusinessLayer();
+
+        //    Products product = new Products( );
+
+
+
+        //    //Act
+
+        //    List<ProductDto?> productList = await pBL.GetAllProductsAsync();
+
+
+        //    //Assert
+
+        //    Assert.IsTrue(true);
+
+        //}
 
 
 

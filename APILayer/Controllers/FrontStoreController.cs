@@ -83,6 +83,18 @@ public class FrontStoreController : ControllerBase
 
 
 
+    //Get all products
+    [HttpGet("GetAllProductsAsync")]
+    public async Task<ActionResult<List<ProductDto?>>> GetAllProductsAsync()
+    {
+
+        List<ProductDto?> productList = await this._PostProduct.GetAllProductsAsync();
+
+       
+        return Ok(productList);
+
+    }
+
 
     //Register new user profile
     [HttpPost("RegisterAsync")]

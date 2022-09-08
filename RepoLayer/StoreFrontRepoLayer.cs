@@ -16,7 +16,7 @@ namespace RepoLayer
 
 
 
-        
+        private readonly IConfiguration _config;
 
         public StoreFrontRepoLayer(IConfiguration config)
         {
@@ -24,7 +24,7 @@ namespace RepoLayer
             _config = config;
 
         }
-        public IConfiguration _config { get; }
+       
 
 
         //Insert product into inventory
@@ -130,6 +130,46 @@ namespace RepoLayer
                     conn.Close();
                     return null;
                 }
+            }
+
+        }//EoM
+
+
+
+        //Get all Products
+
+        public async Task<List<ProductDto?>> GetAllProductsAsync()
+        {
+            SqlConnection conn = new SqlConnection();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Products", conn))
+            {          
+                conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                
+                List<ProductDto?> productList = new List<ProductDto?>();
+
+                while (ret.Read())
+                {
+
+                    ProductDto p = new ProductDto();
+
+                    p.ProductID = ret.GetGuid(0);
+                    p.ProductName = ret.GetString(1);
+
+                    byte[] Imagebyte = (byte[])ret["ProductImage"];
+                    p.ProductImage = Imagebyte;
+
+                    p.ProductDetails = ret.GetString(3);
+                    p.ProductPrice = (double)ret.GetDecimal(4);
+                    p.StockDate = ret.GetDateTime(5);
+                    p.Stock = ret.GetInt32(6);
+
+                    productList.Add(p);
+
+                    
+                }
+                conn.Close();
+                return productList;
             }
 
         }//EoM

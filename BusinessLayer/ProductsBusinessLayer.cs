@@ -28,7 +28,7 @@ public class ProductsBusinessLayer
 
             Guid id = Guid.NewGuid();
 
-            Products product1 = await this._repoLayer.InsertProductsAsync(product, Imagebyte); ;
+            Products product1 = await this._repoLayer.InsertProductsAsync(product, Imagebyte); 
 
             return product1;
 
@@ -49,6 +49,22 @@ public class ProductsBusinessLayer
 
     }
 
+
+
+    //Get all products
+
+    public async Task<List<ProductDto?>> GetAllProductsAsync()
+    {
+
+        List<ProductDto?> productList = await this._repoLayer.GetAllProductsAsync();
+
+       
+        return productList;
+
+    }
+
+
+    
 
     //Check for existing user before they register
     public async Task<UserProfile> RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
