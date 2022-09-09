@@ -53,7 +53,7 @@ namespace Tests.StoreFrontAPI
 
             //Act
 
-            CartsProducts newcartproduct = new CartsProducts()
+            CartProducts newcartproduct = new CartProducts()
             {
                 CartsProductsID = guid,
                 FK_ProductID = guid,
