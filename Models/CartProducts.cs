@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class CartsProducts
+    public class CartProducts
     {
-        public Guid CartsProductsID { get; set; }
+        public Guid CartProductsID { get; set; }
         public Guid FK_ProductID { get; set; }
         public Guid FK_CartID { get; set; }
 
