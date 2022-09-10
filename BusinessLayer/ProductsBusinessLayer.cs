@@ -89,38 +89,10 @@ public class ProductsBusinessLayer
 
         }
 
+
+
+
     }
-
-
-
-    //Check for existing product in cart before inserting them
-    public async Task<CartsProducts> AddProductToCartAsync(CartsProducts addtocart)
-    {
-            bool cp = await this._repoLayer.CheckExisitngCartProductAsync(addtocart);
-
-            if (cp)
-            {
-                return null;
-            }
-            else
-            {
-
-                Guid id = Guid.NewGuid();
-
-                CartsProducts addtocart1 = await this._repoLayer.AddProductToCartAsync(addtocart);
-
-                return addtocart1;
-
-
-            }
-
-
-    }//EoM
-
-
-
-
-    
 
     
  
