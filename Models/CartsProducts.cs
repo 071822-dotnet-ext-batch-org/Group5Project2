@@ -9,7 +9,7 @@ namespace Models
     public class CartsProducts
     {
         public Guid CartsProductsID { get; set; }
-        public Guid FK_ProductID { get; set; }
+        public Guid FK_ProductsID { get; set; }
         public Guid FK_CartID { get; set; }
 
     }
