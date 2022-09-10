@@ -30,7 +30,7 @@ namespace RepoLayer
         //Insert product into inventory
         public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
         {
-            SqlConnection conn = new SqlConnection();
+            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Products] (ProductID, ProductName, ProductImage, ProductDetails, ProductPrice, StockDate, Stock)  VALUES (@productID, @productName, @productImage, @productDetails, @productPrice, @stockDate, @stock)", conn))
             {
                 
@@ -56,7 +56,7 @@ namespace RepoLayer
         //Check for exisiting products before inserting
         public async Task<bool> CheckExisitngProductAsync(Products product)
         {
-            SqlConnection conn = new SqlConnection();
+            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Products WHERE ProductName = @productName", conn))
             {
                 command.Parameters.AddWithValue("@productName", product.ProductName);
@@ -242,6 +242,62 @@ namespace RepoLayer
             }
 
         }//EoM
+
+
+        //Add product to cart
+        public async Task<CartsProducts> AddProductToCartAsync(CartsProducts addtocart)
+        {
+            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[CartsProducts] (CartsProductsID, FK_ProductsID, FK_CartID)  VALUES (@cartsproductsID, @fk_productID, @fk_cartID)", conn))
+            {
+
+                command.Parameters.Add("@cartsproductsID", SqlDbType.UniqueIdentifier).Value = addtocart.CartsProductsID;
+                command.Parameters.Add("@fk_productID", SqlDbType.UniqueIdentifier).Value = addtocart.FK_ProductsID;
+                command.Parameters.Add("@fk_cartID", SqlDbType.UniqueIdentifier).Value = addtocart.FK_CartID;
+
+
+                conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+
+                conn.Close();
+                return addtocart;
+            }
+        }//EoM
+
+
+
+        //Check for exisiting products in cart
+        public async Task<bool> CheckExisitngCartProductAsync(CartsProducts addtocart)
+        {
+            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM [dbo].[CartsProducts] WHERE CartsProductsID = @cartsproductID", conn))
+            {
+                command.Parameters.AddWithValue("@cartsproductID", addtocart.CartsProductsID);
+                conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+
+                    CartsProducts cp = new CartsProducts();
+
+                    cp.CartsProductsID = ret.GetGuid(0);
+                    cp.FK_ProductsID = ret.GetGuid(1);
+                    cp.FK_CartID = ret.GetGuid(2);
+
+                    conn.Close();
+                    return true;
+                }
+                else
+                {
+                    conn.Close();
+                    return false;
+                }
+            }
+
+        }//EoM
+
+
 
 
 

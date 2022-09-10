@@ -53,10 +53,10 @@ namespace Tests.StoreFrontAPI
 
             //Act
 
-            CartProducts newcartproduct = new CartProducts()
+            CartsProducts newcartproduct = new CartsProducts()
             {
-                CartProductsID = guid,
-                FK_ProductID = guid,
+                CartsProductsID = guid,
+                FK_ProductsID = guid,
                 FK_CartID = guid,
 
             };
@@ -64,7 +64,7 @@ namespace Tests.StoreFrontAPI
 
             //Assert
 
-            Assert.AreEqual(newcartproduct.CartProductsID, guid);
+            Assert.AreEqual(newcartproduct.CartsProductsID, guid);
 
         }
 
