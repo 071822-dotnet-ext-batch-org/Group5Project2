@@ -1,8 +1,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using RepoLayer;
+using BusinessLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<StoreFrontRepoLayer>();
+builder.Services.AddScoped<IRepo, Repo>();
+builder.Services.AddScoped<IBus, Bus>();
 
 var config = builder.Configuration["ConnectionStrings:project2ApiDB"];
 
