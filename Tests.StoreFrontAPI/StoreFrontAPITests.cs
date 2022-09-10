@@ -56,7 +56,7 @@ namespace Tests.StoreFrontAPI
             CartsProducts newcartproduct = new CartsProducts()
             {
                 CartsProductsID = guid,
-                FK_ProductID = guid,
+                FK_ProductsID = guid,
                 FK_CartID = guid,
 
             };
@@ -101,32 +101,32 @@ namespace Tests.StoreFrontAPI
         }
 
 
-     
-
-        //[Test]
-        //public async Task ProductsWorksCorrectly()
-        //{
-        //    //Arrange
-        //    Guid guid = Guid.NewGuid();
-
-        //    Mock_RepoLayer m = new Mock_RepoLayer();
-
-        //    ProductsBusinessLayer pBL = new ProductsBusinessLayer();
-
-        //    Products product = new Products( );
 
 
+        [Test]
+        public async Task ProductsWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
 
-        //    //Act
+            Mock_RepoLayer m = new Mock_RepoLayer();
 
-        //    List<ProductDto?> productList = await pBL.GetAllProductsAsync();
+            ProductsBusinessLayer pBL = new ProductsBusinessLayer();
+
+            Products product = new Products();
 
 
-        //    //Assert
 
-        //    Assert.IsTrue(true);
+            //Act
 
-        //}
+            List<ProductDto?> productList = await pBL.GetAllProductsAsync();
+
+
+            //Assert
+
+            Assert.IsTrue(true);
+
+        }
 
 
 
