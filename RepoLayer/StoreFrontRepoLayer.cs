@@ -30,7 +30,7 @@ namespace RepoLayer
         //Insert product into inventory
         public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
         {
-            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Products] (ProductID, ProductName, ProductImage, ProductDetails, ProductPrice, StockDate, Stock)  VALUES (@productID, @productName, @productImage, @productDetails, @productPrice, @stockDate, @stock)", conn))
             {
                 
@@ -56,7 +56,7 @@ namespace RepoLayer
         //Check for exisiting products before inserting
         public async Task<bool> CheckExisitngProductAsync(Products product)
         {
-            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Products WHERE ProductName = @productName", conn))
             {
                 command.Parameters.AddWithValue("@productName", product.ProductName);
@@ -247,7 +247,7 @@ namespace RepoLayer
         //Add product to cart
         public async Task<CartsProducts> AddProductToCartAsync(CartsProducts addtocart)
         {
-            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[CartsProducts] (CartsProductsID, FK_ProductsID, FK_CartID)  VALUES (@cartsproductsID, @fk_productID, @fk_cartID)", conn))
             {
 
@@ -269,7 +269,7 @@ namespace RepoLayer
         //Check for exisiting products in cart
         public async Task<bool> CheckExisitngCartProductAsync(CartsProducts addtocart)
         {
-            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM [dbo].[CartsProducts] WHERE CartsProductsID = @cartsproductID", conn))
             {
                 command.Parameters.AddWithValue("@cartsproductID", addtocart.CartsProductsID);
