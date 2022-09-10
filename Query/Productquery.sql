@@ -1,9 +1,8 @@
 CREATE TABLE Products(
  ProductID UNIQUEIDENTIFIER PRIMARY KEY, 
- ProductName VARCHAR(300) NOT NULL,
+ ProductName VARCHAR(500) NOT NULL,
  ProductImage VARBINARY(MAX),
- ProductDetails VARCHAR(600) NOT NULL,
+ ProductDetails VARCHAR  NOT NULL,
  ProductPrice SMALLMONEY NOT NULL,
  StockDate Date NOT NULL DEFAULT (GETDATE()),
  Stock INT NULL)
-
