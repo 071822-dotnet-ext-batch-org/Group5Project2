@@ -132,9 +132,34 @@ public class FrontStoreController : ControllerBase
 
 
 
-}//EoM
+    }//EoM
 
 
+
+
+    //This API will insert buyers products into cart
+    [HttpPost("AddProductToCartAsync")]
+
+    public async Task<ActionResult> AddProductToCartAsync([FromForm] CartsProducts addtocart)
+    {
+
+        CartsProducts addtocart1 = await this._PostProduct.AddProductToCartAsync(addtocart);
+
+        if (addtocart1 != null)
+        {
+
+
+            return Ok(new { status = true, message = "Product was inserted into cart Successfully." });
+
+        }
+        else
+        {
+
+            return BadRequest("This product has already being inserted into cart.");
+        }
+
+
+    }//EoM
 
 
 
