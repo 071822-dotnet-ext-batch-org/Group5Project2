@@ -3,10 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Models;
 using System.Data;
 
-
-
-
-
 namespace RepoLayer
 {
 
@@ -14,19 +10,13 @@ namespace RepoLayer
     {
         public StoreFrontRepoLayer() { }
 
-
-
-        private readonly IConfiguration _config;
+        private readonly IConfiguration? _config;
 
         public StoreFrontRepoLayer(IConfiguration config)
         {
-
             _config = config;
-
         }
        
-
-
         //Insert product into inventory
         public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
         {
