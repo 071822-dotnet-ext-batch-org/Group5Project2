@@ -19,6 +19,7 @@ CREATE TABLE Profiles(
 	profileName NVARCHAR(MAX),
 	profileAddress NVARCHAR(MAX),
 	profilePhone NVARCHAR(MAX),
+	profileEmail NVARCHAR(100),
 	profilePicture VARBINARY(MAX),
 	fk_userID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Users(userID),
 	dateCreated DATETIME2 NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +35,7 @@ CREATE TABLE Carts(
 
 CREATE TABLE Products(
 	productID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT newid(),
-	productName NVARCHAR(MAX) UNIQUE,
+	productName NVARCHAR(500) UNIQUE,
 	productImage VARBINARY(MAX),
 	productPrice SMALLMONEY,
 	productDetails NVARCHAR(MAX),

@@ -9,5 +9,7 @@ namespace BusinessLayer
     public interface IBus
     {
         Task<User?> LoginAsync(LoginDto request);
+        Task<UserInfoDto?> GetUserInfoAsync(string username);
+        Task<byte[]?> GetUserPhotoAsync(string username);
     }
 }

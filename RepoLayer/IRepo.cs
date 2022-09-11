@@ -9,5 +9,7 @@ namespace RepoLayer
     public interface IRepo
     {
         Task<User?> GetUserByUsername(string? username);
+        Task<UserProfile?> GetProfileByUserID(Guid? userID);
+        Task<byte[]?> GetProfilePictureByUserID(Guid? userID);
     }
 }
