@@ -18,9 +18,6 @@ builder.Services.AddScoped<IBus, Bus>();
 
 var config = builder.Configuration["ConnectionStrings:project2ApiDB"];
 
-Console.WriteLine("This is a connection test: " + builder.Configuration["ConnectionStrings:project2ApiDB"]);
-
-
 var app = builder.Build();
 
 

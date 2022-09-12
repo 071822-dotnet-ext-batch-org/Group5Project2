@@ -10,13 +10,15 @@ namespace RepoLayer
     {
         public StoreFrontRepoLayer() { }
 
-        private readonly IConfiguration? _config;
+        private readonly IConfiguration _config;
+        private readonly SqlConnection conn;
 
         public StoreFrontRepoLayer(IConfiguration config)
         {
             _config = config;
+            conn = new SqlConnection(_config["ConnectionStrings:project2ApiDB"]);
         }
-       
+
         //Insert product into inventory
         public async Task<Products> InsertProductsAsync(Products product, byte[]? Imagebyte)
         {
@@ -171,7 +173,7 @@ namespace RepoLayer
         public async Task<UserProfile> RegisterAsync(UserProfile userprofile, byte[]? UserImagebyte)
         {
             SqlConnection conn = new SqlConnection();
-            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Profiles] (ProfileID, ProfileName, ProfileAddress, ProfilePhone, ProfileEmail, ProfilePicture, Fk_UserID)  VALUES (@profileID, @profileName, @profileAddress, @profilePhone, @profileEmail, @profileImage, @fk_UserID)", conn))
+            using (SqlCommand command = new SqlCommand($"INSERT INTO [dbo].[Profiles] (ProfileID, ProfileName, ProfileAddress, ProfilePhone, ProfileEmail, ProfilePicture, Fk_UserID, DateCreated, DateModified)  VALUES (@profileID, @profileName, @profileAddress, @profilePhone, @profileEmail, @profileImage, @fk_UserID, @dateCreated, @dateModified )", conn))
             {
 
                 command.Parameters.Add("@profileID", SqlDbType.UniqueIdentifier).Value = userprofile.ProfileID;
@@ -181,7 +183,8 @@ namespace RepoLayer
                 command.Parameters.Add("@profileEmail", SqlDbType.VarChar).Value = userprofile.ProfileEmail;
                 command.Parameters.Add("@profileImage", SqlDbType.VarBinary).Value = UserImagebyte;
                 command.Parameters.Add("@fk_UserID", SqlDbType.UniqueIdentifier).Value = userprofile.Fk_UserID;
-                
+                command.Parameters.Add("@dateCreated", SqlDbType.Date).Value = userprofile.dateCreated;
+                command.Parameters.Add("@dateModified", SqlDbType.Date).Value = userprofile.dateModified;
 
                 conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
