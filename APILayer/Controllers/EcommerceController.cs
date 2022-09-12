@@ -57,14 +57,14 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("user/{username}/photo")]
-        public async Task<ActionResult<byte[]?>> GetUserPhotoAsync(string username)
+        public async Task<ActionResult<Stream?>> GetUserPhotoAsync(string username)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            byte[]? p = await this._bus.GetUserPhotoAsync(username);
+            Stream? p = await this._bus.GetUserPhotoAsync(username);
 
             if(p == null)
             {
@@ -73,5 +73,41 @@ namespace APILayer.Controllers
 
             return File(p, "image/png");
         }
+
+        [HttpPost("user/register")]
+        public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            UserInfoDto? u = await this._bus.RegisterNewUserAsync(request);
+
+            if (u?.ErrorMessage != String.Empty)
+            {
+                return Unauthorized(u?.ErrorMessage);
+            }
+
+            return Created($"/user/{request.Username}", u);
+        }
+
+        // [HttpGet("products")]
+        // public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
+        // {
+        //     if(!ModelState.IsValid)
+        //     {
+        //         return BadRequest();
+        //     }
+
+        //     UserInfoDto? u = await this._bus.RegisterNewUserAsync(request);
+
+        //     if (u?.ErrorMessage != String.Empty)
+        //     {
+        //         return Unauthorized(u?.ErrorMessage);
+        //     }
+
+        //     return Created($"/user/{request.Username}", u);
+        // }
     }
 }
