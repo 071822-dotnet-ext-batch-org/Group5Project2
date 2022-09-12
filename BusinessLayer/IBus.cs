@@ -10,6 +10,7 @@ namespace BusinessLayer
     {
         Task<User?> LoginAsync(LoginDto request);
         Task<UserInfoDto?> GetUserInfoAsync(string username);
-        Task<byte[]?> GetUserPhotoAsync(string username);
+        Task<Stream?> GetUserPhotoAsync(string username);
+        Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request);
     }
 }

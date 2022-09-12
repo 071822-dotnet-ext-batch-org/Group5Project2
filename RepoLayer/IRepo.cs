@@ -10,6 +10,10 @@ namespace RepoLayer
     {
         Task<User?> GetUserByUsername(string? username);
         Task<UserProfile?> GetProfileByUserID(Guid? userID);
-        Task<byte[]?> GetProfilePictureByUserID(Guid? userID);
+        Task<Stream?> GetProfilePictureByUserID(Guid? userID);
+        Task<User?> InsertUserAsync(RegisterDto request);
+        Task<UserProfile?> InsertProfileAsync(RegisterDto request);
+        Task<Cart?> InsertCartAsync(Guid? userID);
+        Task<Cart?> GetCartByUserID(Guid? userID);
     }
 }
