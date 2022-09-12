@@ -51,7 +51,8 @@ CREATE TABLE Orders(
 	dateOrdered DATETIME2 DEFAULT CURRENT_TIMESTAMP,
 	dateDelivered DATETIME2,
 	cancelled BIT,
-	refunded BIT
+	refunded BIT,
+	fk_userID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Users(userID)
 );
 
 CREATE TABLE CartsProducts(
