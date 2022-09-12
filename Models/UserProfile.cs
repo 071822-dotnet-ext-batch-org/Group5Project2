@@ -10,13 +10,11 @@ namespace Models
 {
     public class UserProfile
     {
-
         public UserProfile()
         {
         }
 
         public UserProfile(Guid? profileID, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Stream? profilePicture, Guid? fk_UserID, DateTime? dateCreated, DateTime? dateModified)
-
         {
             ProfileID = profileID;
             ProfileName = profileName;
@@ -28,8 +26,6 @@ namespace Models
             this.dateCreated = dateCreated;
             this.dateModified = dateModified;
         }
-
-        
 
         public Guid?  ProfileID { get; set; }
         public string? ProfileName { get; set; }
