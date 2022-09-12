@@ -7,6 +7,7 @@ namespace Models
 {
     public class UserInfoDto
     {
+        public UserInfoDto() { }
         public UserInfoDto(Guid? userID, string? username, Guid? profileID, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail)
         {
             UserID = userID;

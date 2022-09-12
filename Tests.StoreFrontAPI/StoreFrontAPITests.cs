@@ -81,7 +81,7 @@ namespace Tests.StoreFrontAPI
 
             //Act
 
-            UserProfile newuser = new UserProfile()
+            UserProfileDto newuser = new UserProfileDto()
             {
                 ProfileID = guid,
                 ProfileName = "Ken",
@@ -125,6 +125,41 @@ namespace Tests.StoreFrontAPI
             //Assert
 
             Assert.IsTrue(true);
+
+        }
+
+
+
+
+        [Test]
+        public void UserinfoWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+
+            //Act
+
+            UserInfoDto newuser = new UserInfoDto()
+            {
+              UserID = guid,
+              Username = "ken22",
+              ProfileID = guid,
+              ProfileName = "Ken",
+              ProfileAddress = "Ken address",
+              ProfilePhone = "713556267",
+              ProfileEmail = "ken@yahoo.com",
+
+
+
+
+
+        };
+
+
+            //Assert
+
+            Assert.AreEqual(newuser.UserID, guid);
 
         }
 
