@@ -25,7 +25,7 @@ public class FrontStoreController : ControllerBase
 
 
     //This API will insert products into inventory
-    [HttpPost("InsertProduct")]
+    [HttpPost("InsertProductsAsync")]
 
     public async Task<ActionResult> InsertProductsAsync( [FromForm] Products product)
     {
@@ -67,7 +67,7 @@ public class FrontStoreController : ControllerBase
 
 
     //This API will get products by ID
-    [HttpGet("GetproductById")]
+    [HttpGet("GetProductByIdAsync")]
     public async Task<ActionResult<ProductDto?>> GetProductByIdAsync(Guid productID)
     {
         
@@ -84,7 +84,7 @@ public class FrontStoreController : ControllerBase
 
 
     //Get all products
-    [HttpGet("GetAllProducts")]
+    [HttpGet("GetAllProductsAsync")]
     public async Task<ActionResult<List<ProductDto?>>> GetAllProductsAsync()
     {
 
@@ -97,7 +97,7 @@ public class FrontStoreController : ControllerBase
 
 
     //Register new user profile
-    [HttpPost("Register")]
+    [HttpPost("RegisterAsync")]
     public async Task<ActionResult> RegisterAsync([FromForm] UserProfile userprofile)
     {
 
@@ -138,7 +138,7 @@ public class FrontStoreController : ControllerBase
 
 
     //This API will insert buyers products into cart
-    [HttpPost("AddProductToCart")]
+    [HttpPost("AddProductToCartAsync")]
 
     public async Task<ActionResult> AddProductToCartAsync([FromForm] CartsProducts addtocart)
     {
