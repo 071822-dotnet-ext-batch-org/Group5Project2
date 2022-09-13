@@ -74,7 +74,7 @@ namespace APILayer.Controllers
             return File(p, "image/png");
         }
 
-        [HttpPost("user/register")]
+        [HttpPost("register")]
         public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
         {
             if(!ModelState.IsValid)
@@ -92,22 +92,58 @@ namespace APILayer.Controllers
             return Created($"/user/{request.Username}", u);
         }
 
-        // [HttpGet("products")]
-        // public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
-        // {
-        //     if(!ModelState.IsValid)
-        //     {
-        //         return BadRequest();
-        //     }
+        [HttpGet("products")]
+        public async Task<ActionResult<List<Product?>>> GetAllProductsAsync()
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-        //     UserInfoDto? u = await this._bus.RegisterNewUserAsync(request);
+            List<Product?> p = await this._bus.GetAllProductsAsync();
 
-        //     if (u?.ErrorMessage != String.Empty)
-        //     {
-        //         return Unauthorized(u?.ErrorMessage);
-        //     }
+            return Ok(p);
+        }
 
-        //     return Created($"/user/{request.Username}", u);
-        // }
+        [HttpGet("product/{productID}/image")]
+        public async Task<ActionResult<Stream?>> GetProductImageAsync(Guid? productID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            Stream? p = await this._bus.GetProductImageAsync(productID);
+
+            if(p == null)
+            {
+                return NotFound("Image not found");
+            }
+
+            return File(p, "image/png");
+        }
+
+        [HttpPost("create-order")]
+        public async Task<ActionResult<Order?>> CreateOrderAsync(Guid? userID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            Order? o = await this._bus.CreateOrderAsync(userID);
+
+            if(o == null)
+            {
+                return Unauthorized("Unable to create order");
+            }
+
+            return Created($"my-orders/{o.OrderID}", o);
+        }
+
+        // TODO: Get all orders
+        // TODO: Get single order with list of products
+        // TODO: Get all cart items
+        // TODO: Add item to cart
     }
 }
