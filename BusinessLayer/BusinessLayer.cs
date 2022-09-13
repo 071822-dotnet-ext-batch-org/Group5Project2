@@ -15,7 +15,7 @@ public class Bus : IBus
 
     public async Task<User?> LoginAsync(LoginDto request)
     {
-        User? u = await this._repo.GetUserByUsername(request.Username);
+        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
 
         if (u == null || u.Password != request.Password)
         {
@@ -27,35 +27,44 @@ public class Bus : IBus
 
     public async Task<UserInfoDto?> GetUserInfoAsync(string request)
     {
-        User? u = await this._repo.GetUserByUsername(request);
+        User? u = await this._repo.GetUserByUsernameAsync(request);
 
         if (u == null)
         {
             return null;
         }
 
-        UserProfile? p = await this._repo.GetProfileByUserID(u.UserID);
+        UserProfile? p = await this._repo.GetProfileByUserIDAsync(u.UserID);
 
         if (p == null)
         {
             return null;
         }
 
-        UserInfoDto uidto = new UserInfoDto(u.UserID, u.Username, p.ProfileID, p.ProfileName, p.ProfileAddress, p.ProfilePhone, p.ProfileEmail);
+        Cart? c = await this._repo.GetCartByUserIDAsync(u.UserID);
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        bool hasProfilePicture = (p?.ProfilePicture?.Length > 0);
+
+        UserInfoDto uidto = new UserInfoDto(u.UserID, u.Username, p?.ProfileID, p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c.CartID, hasProfilePicture);
         
         return uidto;
     }
 
-    public async Task<byte[]?> GetUserPhotoAsync(string request)
+    public async Task<Stream?> GetUserPhotoAsync(string request)
     {
-        User? u = await this._repo.GetUserByUsername(request);
+        User? u = await this._repo.GetUserByUsernameAsync(request);
 
         if (u == null)
         {
             return null;
         }
 
-        byte[]? photo = await this._repo.GetProfilePictureByUserID(u.UserID);
+        Stream? photo = await this._repo.GetProfilePictureByUserIDAsync(u.UserID);
 
         if (photo?.Length == 0 || photo == null)
         {
@@ -63,5 +72,145 @@ public class Bus : IBus
         }
 
         return photo;
+    }
+
+    public async Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request)
+    {
+        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
+        UserInfoDto uidto = new UserInfoDto();
+
+        if (u != null)
+        {
+            uidto.ErrorMessage = "Username already taken";
+            return uidto;
+        }
+
+        User? nu = await this._repo.InsertUserAsync(request);
+
+        if (nu == null)
+        {
+            uidto.ErrorMessage = "There was an error creating the user";
+            return uidto;
+        }
+
+        UserProfile? np = await this._repo.InsertProfileAsync(request);
+        
+        if (np == null)
+        {
+            uidto.ErrorMessage = "There was an error creating the profile";
+            return uidto;
+        }
+
+        Cart? c = await this._repo.InsertCartAsync(nu.UserID);
+
+        if (c == null)
+        {
+            uidto.ErrorMessage = "There was an error creating the cart";
+            return uidto;
+        }
+        
+        uidto.UserID = nu.UserID;
+        uidto.Username = nu.Username;
+        uidto.ProfileID = np.ProfileID;
+        uidto.ProfileName = np.ProfileName;
+        uidto.ProfileAddress = np.ProfileAddress;
+        uidto.ProfilePhone = np.ProfilePhone;
+        uidto.ProfileEmail = np.ProfileEmail;
+        uidto.CartID = c.CartID;
+
+        if (np?.ProfilePicture?.Length > 0)
+        {
+            uidto.HasProfilePicture = true;
+        } 
+        else 
+        {
+            uidto.HasProfilePicture = false;
+        }
+
+        return uidto;
+    }
+
+    public async Task<List<Product?>> GetAllProductsAsync()
+    {
+        return await this._repo.GetAllProductsAsync();
+    }
+
+    public async Task<Stream?> GetProductImageAsync(Guid? request)
+    {
+        Product? p = await this._repo.GetProductByProductIDAsync(request);
+
+        if (p == null)
+        {
+            return null;
+        }
+
+        Stream? image = await this._repo.GetProductImageByProductIDAsync(p.ProductID);
+
+        if (image?.Length == 0 || image == null)
+        {
+            return null;
+        }
+
+        return image;
+    }
+
+    public async Task<Order?> CreateOrderAsync(Guid? userID)
+    {
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        List<Product?> productList = await this._repo.GetProductsFromCartAsync(c.CartID);
+
+        if (productList.Count == 0)
+        {
+            return null;
+        }
+
+        decimal? orderTotal = productList.Sum(product => product?.ProductPrice);
+
+        Guid orderID = Guid.NewGuid();
+
+        Order? o = await this._repo.InsertOrderAsync(orderID, userID, orderTotal);
+
+        List<Guid?> productIDs = productList.Select(product => product?.ProductID).ToList<Guid?>();
+
+        bool insertOrdersProductsSuccess = await this._repo.InsertOrdersProductsAsync(productIDs, o?.OrderID);
+
+        if (!insertOrdersProductsSuccess)
+        {
+            return null;
+        }
+
+        bool emptyCartSuccess = await this._repo.DeleteAllItemsFromCartByCartIDAsync(c.CartID);
+        
+        if(!emptyCartSuccess)
+        {
+            return null;
+        }
+
+        return o;
+    }
+
+    public async Task<List<Order?>> GetMyOrdersAsync(Guid? userID)
+    {
+        return await this._repo.GetMyOrdersAsync(userID);
+    }
+
+    public async Task<SingleOrderDto?> GetOrderAsync(Guid? orderID)
+    {
+        Order? o = await this._repo.GetOrderByOrderIDAsync(orderID);
+
+        if (o == null)
+        {
+            return null;
+        }
+
+        List<Product?> productList = await this._repo.GetProductsInOrderAsync(orderID);
+
+        return new SingleOrderDto(productList, o);
     }
 }

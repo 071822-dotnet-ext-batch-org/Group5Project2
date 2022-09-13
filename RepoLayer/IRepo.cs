@@ -8,8 +8,22 @@ namespace RepoLayer
 {
     public interface IRepo
     {
-        Task<User?> GetUserByUsername(string? username);
-        Task<UserProfile?> GetProfileByUserID(Guid? userID);
-        Task<byte[]?> GetProfilePictureByUserID(Guid? userID);
+        Task<User?> GetUserByUsernameAsync(string? username);
+        Task<UserProfile?> GetProfileByUserIDAsync(Guid? userID);
+        Task<Stream?> GetProfilePictureByUserIDAsync(Guid? userID);
+        Task<User?> InsertUserAsync(RegisterDto request);
+        Task<UserProfile?> InsertProfileAsync(RegisterDto request);
+        Task<Cart?> InsertCartAsync(Guid? userID);
+        Task<Cart?> GetCartByUserIDAsync(Guid? userID);
+        Task<List<Product?>> GetAllProductsAsync();
+        Task<Product?> GetProductByProductIDAsync(Guid? request);
+        Task<Stream?> GetProductImageByProductIDAsync(Guid? request);
+        Task<List<Product?>> GetProductsFromCartAsync(Guid? cartID);
+        Task<Order?> InsertOrderAsync(Guid orderID, Guid? userID, decimal? orderTotal);
+        Task<Order?> GetOrderByOrderIDAsync(Guid? orderID);
+        Task<bool> InsertOrdersProductsAsync(List<Guid?> productIDs, Guid? orderID);
+        Task<bool> DeleteAllItemsFromCartByCartIDAsync(Guid? cartID);
+        Task<List<Order?>> GetMyOrdersAsync(Guid? userID);
+        Task<List<Product?>> GetProductsInOrderAsync(Guid? orderID);
     }
 }
