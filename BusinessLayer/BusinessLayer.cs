@@ -15,7 +15,7 @@ public class Bus : IBus
 
     public async Task<User?> LoginAsync(LoginDto request)
     {
-        User? u = await this._repo.GetUserByUsername(request.Username);
+        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
 
         if (u == null || u.Password != request.Password)
         {
@@ -27,21 +27,21 @@ public class Bus : IBus
 
     public async Task<UserInfoDto?> GetUserInfoAsync(string request)
     {
-        User? u = await this._repo.GetUserByUsername(request);
+        User? u = await this._repo.GetUserByUsernameAsync(request);
 
         if (u == null)
         {
             return null;
         }
 
-        UserProfile? p = await this._repo.GetProfileByUserID(u.UserID);
+        UserProfile? p = await this._repo.GetProfileByUserIDAsync(u.UserID);
 
         if (p == null)
         {
             return null;
         }
 
-        Cart? c = await this._repo.GetCartByUserID(u.UserID);
+        Cart? c = await this._repo.GetCartByUserIDAsync(u.UserID);
 
         if (c == null)
         {
@@ -57,14 +57,14 @@ public class Bus : IBus
 
     public async Task<Stream?> GetUserPhotoAsync(string request)
     {
-        User? u = await this._repo.GetUserByUsername(request);
+        User? u = await this._repo.GetUserByUsernameAsync(request);
 
         if (u == null)
         {
             return null;
         }
 
-        Stream? photo = await this._repo.GetProfilePictureByUserID(u.UserID);
+        Stream? photo = await this._repo.GetProfilePictureByUserIDAsync(u.UserID);
 
         if (photo?.Length == 0 || photo == null)
         {
@@ -76,7 +76,7 @@ public class Bus : IBus
 
     public async Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request)
     {
-        User? u = await this._repo.GetUserByUsername(request.Username);
+        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
         UserInfoDto uidto = new UserInfoDto();
 
         if (u != null)
@@ -128,5 +128,65 @@ public class Bus : IBus
         }
 
         return uidto;
+    }
+
+    public async Task<List<Product?>> GetAllProductsAsync()
+    {
+        return await this._repo.GetAllProductsAsync();
+    }
+
+    public async Task<Stream?> GetProductImageAsync(Guid? request)
+    {
+        Product? p = await this._repo.GetProductByProductIDAsync(request);
+
+        if (p == null)
+        {
+            return null;
+        }
+
+        Stream? image = await this._repo.GetProductImageByProductIDAsync(p.ProductID);
+
+        if (image?.Length == 0 || image == null)
+        {
+            return null;
+        }
+
+        return image;
+    }
+
+    public async Task<Order?> CreateOrderAsync(Guid? userID)
+    {
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        List<Product?> productList = await this._repo.GetProductsFromCartAsync(c.CartID);
+
+        if (productList.Count == 0)
+        {
+            return null;
+        }
+
+        decimal? orderTotal = productList.Sum(product => product?.ProductPrice);
+
+        Guid orderID = Guid.NewGuid();
+
+        Order? o = await this._repo.InsertOrderAsync(orderID, userID, orderTotal);
+
+        List<Guid?> productIDs = productList.Select(product => product?.ProductID).ToList<Guid?>();
+
+        bool insertOrdersProductsSuccess = await this._repo.InsertOrdersProductsAsync(productIDs, o?.OrderID);
+
+        if (!insertOrdersProductsSuccess)
+        {
+            return null;
+        }
+
+        bool emptyCartSuccess = await this._repo.DeleteAllItemsFromCartByCartID(c.CartID);
+        
+        return o;
     }
 }
