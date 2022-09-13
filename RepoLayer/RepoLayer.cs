@@ -469,4 +469,33 @@ public class Repo : IRepo
             return productList;
         }
     }
+
+    public async Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID)
+    {
+        string sql1 = $"INSERT INTO CartsProducts (fk_cartID, fk_productID) VALUES (@cartID, @productID)";
+        string sql2 = $"UPDATE Carts SET cartItems = cartItems + 1 WHERE cartID = @cartID";
+        bool ret1 = false;
+        bool ret2 = false;
+        
+        using (SqlCommand command = new SqlCommand(sql1, _conn))
+        {
+            command.Parameters.AddWithValue("@cartID", cartID);
+            command.Parameters.AddWithValue("@productID", productID);
+
+            _conn.Open();
+            ret1 = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+        }
+
+        using (SqlCommand command = new SqlCommand(sql2, _conn))
+        {
+            command.Parameters.AddWithValue("@cartID", cartID);
+
+            _conn.Open();
+            ret2 = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+        }
+
+        return ret1 && ret2;
+    }
 }

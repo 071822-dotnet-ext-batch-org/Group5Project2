@@ -25,5 +25,6 @@ namespace RepoLayer
         Task<bool> DeleteAllItemsFromCartByCartIDAsync(Guid? cartID);
         Task<List<Order?>> GetMyOrdersAsync(Guid? userID);
         Task<List<Product?>> GetProductsInOrderAsync(Guid? orderID);
+        Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID);
     }
 }

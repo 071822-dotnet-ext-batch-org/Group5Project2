@@ -10,7 +10,7 @@ using BusinessLayer;
 namespace APILayer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class EcommerceController : ControllerBase
     {
         private readonly IBus _bus;
@@ -172,8 +172,46 @@ namespace APILayer.Controllers
             return Ok(o);
         }
 
-        // TODO: Get single order with list of products
-        // TODO: Get all cart items
-        // TODO: Add item to cart
+        [HttpGet("my-cart")]
+        public async Task<ActionResult<MyCartDto?>> GetMyCartAsync(Guid? userID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            MyCartDto? c = await this._bus.GetMyCartAsync(userID);
+
+            if (c == null)
+            {
+                return Unauthorized("Unable to find cart");
+            }
+
+            return Ok(c);
+        }
+
+        [HttpPost("my-cart/addItem/{productID}")]
+        public async Task<ActionResult<MyCartDto?>> AddProductToCartAsync(Guid? userID, Guid? productID)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            MyCartDto? c = await this._bus.AddProductToCartAsync(userID, productID);
+
+            if (c==null)
+            {
+                return Unauthorized("Unable to add item to cart");
+            }
+
+            return Ok(c);
+        }
+
+        // TODO: Fix seed to add up all productPrice in cart per user to get cartTotal
+        // TODO: Same for orders
+        // TODO: Fix cartItems = Count how many products in CartsProducts by cartID
+        // TODO: Fix orders, add orderItems = ^ in OrdersProducts by orderID
+        // use triggers?
     }
 }

@@ -16,6 +16,17 @@ builder.Services.AddScoped<StoreFrontRepoLayer>();
 builder.Services.AddScoped<IRepo, Repo>();
 builder.Services.AddScoped<IBus, Bus>();
 
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy( name: "MyAllowAllOrigins",
+    builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var config = builder.Configuration["ConnectionStrings:project2ApiDB"];
 
 Console.WriteLine("This is a connection test: " + builder.Configuration["ConnectionStrings:project2ApiDB"]);
@@ -30,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("MyAllowAllOrigins");
 
 app.UseHttpsRedirection();
 

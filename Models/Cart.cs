@@ -19,9 +19,9 @@ namespace Models
             Fk_UserID = fk_UserID;
         }
      
-        public Guid? CartID;
-        public decimal? CartTotal;
-        public int? CartItems;
-        public Guid? Fk_UserID;
+        public Guid? CartID {get; set;}
+        public decimal? CartTotal {get; set;}
+        public int? CartItems {get; set;}
+        public Guid? Fk_UserID {get; set;}
     }
 }

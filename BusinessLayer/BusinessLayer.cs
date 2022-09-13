@@ -213,4 +213,39 @@ public class Bus : IBus
 
         return new SingleOrderDto(productList, o);
     }
+
+    public async Task<MyCartDto?> GetMyCartAsync(Guid? userID)
+    {
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
+        
+        if (c == null)
+        {
+            return null;
+        }
+
+        List<Product?> productList = await this._repo.GetProductsFromCartAsync(c.CartID);
+
+        return new MyCartDto(productList, c);
+    }
+
+    public async Task<MyCartDto?> AddProductToCartAsync(Guid? userID, Guid? productID)
+    {
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        Product? p = await this._repo.GetProductByProductIDAsync(productID);
+
+        if (p == null)
+        {
+            return null;
+        }
+
+        bool addedToCartSuccess = await this._repo.AddProductToCartAsync(c.CartID, productID);
+
+        return await GetMyCartAsync(userID);
+    }
 }

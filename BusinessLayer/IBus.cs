@@ -17,5 +17,7 @@ namespace BusinessLayer
         Task<Order?> CreateOrderAsync(Guid? userID);
         Task<List<Order?>> GetMyOrdersAsync(Guid? userID);
         Task<SingleOrderDto?> GetOrderAsync(Guid? orderID);
+        Task<MyCartDto?> GetMyCartAsync(Guid? userID);
+        Task<MyCartDto?> AddProductToCartAsync(Guid? userID, Guid? productID);
     }
 }
