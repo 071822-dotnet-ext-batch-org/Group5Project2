@@ -133,6 +133,32 @@ public class FrontStoreController : ControllerBase
 
 
     }//EoM
+    // create new order
+      [HttpPost("CreateNewOrderAsync/create")]
+    public async Task<ActionResult> CreateNewOrderAsync(UpdateNewOrderDto order)
+    {
+
+
+       Order? newOrder = await this._PostOrder.CreateNewOrderAsync(order);
+
+        
+        var image = product.ProductImage;
+
+        if (newOrder == null) return NotFound(" Not able to create new order");
+        return Created("Order/{newOrder.OrderId}", newOrder);
+            
+
+    }
+    //update the account details
+     [HttpPost("UpdateAccountDetailsAsync/update")]
+    public async Task<ActionResult> UpdateAccountDetailsAsync(Users user)
+    {
+        Users? usr = await this._PostOrder.CreateNewOrderAsync(user);
+
+        if (usr == null) return NotFound(" Not able to create new order");
+        return Created("Order/{newOrder.OrderId}", usr);
+
+    }
 
 
 
@@ -159,7 +185,44 @@ public class FrontStoreController : ControllerBase
         }
 
 
-    }//EoM
+    }
+    // upload the product image
+    [HttpPut("upload/UpdateProductImageAsync")]
+    public async Task<ActionResult> UpdateProductImageAsync(IFormFile imageFile, Guid productId)
+    {
+        long fileLength = imageFile.Length;
+
+        if (fileLength < 0)
+        {
+            return BadRequest();
+        }
+
+        using Stream fileStream = imageFile.OpenReadStream();
+
+        if (await this._PostOrder.UpdateProductImageAsync(fileStream, productId))
+        {
+            return Created("photo updated", imageFile);
+        }
+
+        Products product1 = await this._PostProduct.InsertProductsAsync(product, Imagebyte);
+
+        if (product1 != null)
+        {
+
+
+            return Ok(new { status = true, message = "Product Posted Successfully" });
+
+        }
+        else
+        {
+
+            return BadRequest("This product already exists in the DataBase.");
+        }
+
+        
+    }
+
+
 
 
 
