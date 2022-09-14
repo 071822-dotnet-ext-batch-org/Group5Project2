@@ -498,4 +498,24 @@ public class Repo : IRepo
 
         return ret1 && ret2;
     }
+
+    public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<User?> UpdateAccountDetailsAsync(User user, Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Products?> UpdateProductImage(Guid productId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> UpdateProductImage(byte[] photo, Guid productId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -26,5 +26,9 @@ namespace RepoLayer
         Task<List<Order?>> GetMyOrdersAsync(Guid? userID);
         Task<List<Product?>> GetProductsInOrderAsync(Guid? orderID);
         Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID);
+        Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id);
+        Task<User?> UpdateAccountDetailsAsync(User user, Guid id);
+        Task<Products?> UpdateProductImage(Guid productId);
+        Task<bool> UpdateProductImage(byte[] photo, Guid productId);
     }
 }
