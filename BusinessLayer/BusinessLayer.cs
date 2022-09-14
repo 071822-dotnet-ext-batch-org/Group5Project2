@@ -248,4 +248,33 @@ public class Bus : IBus
 
         return await GetMyCartAsync(userID);
     }
+
+     public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr)
+    {
+         Guid id = Guid.NewGuid();
+        Order? e = await this._repoLayer.CreateNewOrderAsync(rr,id);
+       
+        return e;
+}
+     public async Task<Users?> UpdateAccountDetailsAsync(Users user )
+    {
+        Guid id = Guid.NewGuid();
+        Users? aa = await this._repoLayer.UpdateAccountDetailsAsync(user, id);
+        return aa;
+
+    }
+    public async Task<bool> UpdateProductImage(Stream file, Guid productId)
+    {
+        Products? updatedTicket = await this._repoLayer.UpdateProductImage(productId);
+
+        if (UpdateProductImage == null) return false;
+
+        using BinaryReader reader = new BinaryReader(file);
+
+        byte[] photo = reader.ReadBytes((int)file.Length);
+
+        bool isSuccess = await this._repoLayer.UpdateProductImage(photo, productId);
+
+        return isSuccess;
+    }
 }
