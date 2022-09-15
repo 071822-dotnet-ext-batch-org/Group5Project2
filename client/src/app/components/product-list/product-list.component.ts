@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EcommerceAPIService } from '../Services/ecommerce-api.service';
+import { EcommerceAPIService } from '../../Services/ecommerce-api.service';
 
 @Component({
   selector: 'app-product-list',

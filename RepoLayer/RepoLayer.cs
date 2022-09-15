@@ -176,7 +176,7 @@ public class Repo : IRepo
 
     public async Task<List<Product?>> GetAllProductsAsync()
     {
-        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified FROM Products";
+        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified, productImage FROM Products";
         List<Product?> productList = new List<Product?>();
 
         using (SqlCommand command = new SqlCommand(sql, _conn))
@@ -207,7 +207,7 @@ public class Repo : IRepo
 
     public async Task<Product?> GetProductByProductIDAsync(Guid? productID)
     {
-        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified FROM Products WHERE productID = @productID";
+        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified, productImage FROM Products WHERE productID = @productID";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
             command.Parameters.AddWithValue("@productID", productID);

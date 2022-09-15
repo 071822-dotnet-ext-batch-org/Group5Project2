@@ -1,0 +1,8 @@
+<button (click)="displayProducts()">Products</button>
+
+<ul>
+    <li *ngFor="let product of products">
+        <p>{{product.productName}}</p>
+        <img src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image">
+    </li>
+</ul>
