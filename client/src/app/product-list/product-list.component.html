@@ -1,5 +1,36 @@
-<button (click)="displayProducts()">Products</button>
+<!-- <button (click)="displayProducts()">Products</button> -->
+
+<!-- <a class="nav-link" [routerLink]="['/home']" (click)="displayProducts()">Home</a> -->
+
+<!-- <a class="nav-link" [routerLink]="['http://localhost:4200/']" (click)="displayProducts()">Home</a> -->
+<!-- <ul>
+    <li *ngFor="let product of products">{{product.productName}}</li>
+</ul> -->
 
 <ul>
-    <li *ngFor="let product of products">{{product.productName}}</li>
+  <div class="displayhori">
+    <li class="removelist" *ngFor="let product of products">
+  
+     <div class="displayProducts">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>{{product.productName}}</mat-card-title>   
+        </mat-card-header>
+        <img class = "img" mat-card-image src= "data:image/png;base64,{{product.productImage}}">
+        <mat-card-content>
+          <p>
+           <span class="cost">Cost:</span> {{product.productPrice}} : Stock: {{product.stock}} : Product ID {{product.productID}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+          <button mat-button>SHOP</button>
+        </mat-card-actions>
+      </mat-card>    
+      </div>
+
+  </li>
+</div>
 </ul>
+

@@ -1,10 +1,22 @@
+// export interface Product{
+//     productID: string;
+//     productName: string;
+//     productPrice: number;
+//     productDetails: string;
+//     stockDate: Date;
+//     stock: number;
+//     dateCreated: Date;
+//     dateModified: Date;
+// }
+
 export interface Product{
-    productID: string;
+
+    productID: number;
     productName: string;
-    productPrice: number;
+    productImage: string;
     productDetails: string;
-    stockDate: Date;
+    productPrice: number;
+    stockDate: string;
     stock: number;
-    dateCreated: Date;
-    dateModified: Date;
+
 }
