@@ -9,10 +9,15 @@ import { ProductListService } from '../../Services/product-list-service/product-
 export class ProductListComponent implements OnInit {
 
   products: any;
+  userregister: any;
+  data: any;
+  
 
   constructor(private PLS: ProductListService) { }
 
   ngOnInit(): void {
+
+    this.displayProducts();
   }
 
   displayProducts(): void {
@@ -22,3 +27,4 @@ export class ProductListComponent implements OnInit {
   }
 
 }
+

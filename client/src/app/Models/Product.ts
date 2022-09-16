@@ -8,3 +8,4 @@ export interface Product{
     dateCreated: Date;
     dateModified: Date;
 }
+
