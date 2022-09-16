@@ -1,3 +1,4 @@
+import { OrderID } from './../../Models/OrderID';
 
 
 import { Injectable } from '@angular/core';
@@ -29,5 +30,12 @@ export class ProductListService {
     
   }
   
+  //Display order by order ID
+  public getOrdersById(orderID : string): Observable<string> {
 
+    return this.http.get<string>(baseURL + '/my-orders' + orderID)
+
+  }
+
+  
 }

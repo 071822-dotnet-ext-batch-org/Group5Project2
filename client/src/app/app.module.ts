@@ -1,3 +1,4 @@
+
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
@@ -41,6 +42,7 @@ import { FormsComponent } from './components/forms/forms.component';
     DashboardComponent,
     FormsComponent,
     HomeComponent,
+    
   ],
   imports: [
     BrowserModule,

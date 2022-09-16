@@ -1,8 +1,12 @@
+
+
 import { ProductListService } from './../../Services/product-list-service/product-list.service';
 import { ProductListComponent } from './../../components/product-list/product-list.component';
 
+
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Orders } from 'src/app/Models/OrderID';
 
 
 @Component({
@@ -14,6 +18,8 @@ export class MyOrdersComponent implements OnInit {
   
   getPriorOrders!: string;
   userID!: any;
+  orderID!: any;
+  orderproduct!: any
   
   constructor(private EcommerceAPI: ProductListService) { }
 
@@ -26,19 +32,36 @@ export class MyOrdersComponent implements OnInit {
     this.EcommerceAPI.getPriorOrdersByUserID(userOrderID).subscribe(data => {
       this.getPriorOrders = data;
        
-      // console.log (getOrders );
-      
-      
+    
     })
 
   }
+    
   
   getPreviousOrders2(){
 
     this.getPriorOrders;
+    console.log(this?.getPriorOrders);
     var getOrders = JSON.stringify(this.getPriorOrders);
     return getOrders;
+    
   }
+  
+   
+  displayOrdersById(): void {
+    this.EcommerceAPI.getProducts().subscribe(data => {
+      this.orderID = data;
+    })
+  }
+
+
+  getproducts(orderID : string){
+    this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
+      this.orderproduct = data;
+
+  })
+ }
+  
   
 
 }
