@@ -1,0 +1,53 @@
+<div class = "registerform">
+        <h2 class="reg">Registration Form</h2>
+
+    <form class="register-form" action="" method="post">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput name = "Username" required>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput name = "Password" required>
+    </mat-form-field>
+  
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>ProfileName</mat-label>
+      <input matInput name = "ProfileName" required>
+    </mat-form-field>
+      
+    <mat-form-field appearance="fill">
+      <mat-label>ProfileAddress</mat-label>
+      <input matInput name = "ProfileAddress" >
+    </mat-form-field>
+  
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>ProfilePhone</mat-label>
+      <input matInput name = "ProfilePhone">
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>ProfileEmail</mat-label>
+      <input matInput name = "ProfileEmail" placeholder="pat@example.com" required>
+    </mat-form-field>
+  
+    <br>
+     
+     <input type="file" class="file-upload" name = "hasProfilePicture" onchange="console.log(event.target.files)">
+  
+    <br>
+    <br>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>ErrorMessage</mat-label>
+      <textarea matInput name = "ErrorMessage"></textarea>
+    </mat-form-field>
+     
+    <br>
+    <button mat-button class="butt" (click)="RegisterUsers(data)">Sign Up</button>
+    </form>
+  </div>
+  

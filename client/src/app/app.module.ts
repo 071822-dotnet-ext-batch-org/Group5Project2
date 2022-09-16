@@ -1,8 +1,22 @@
-import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { MatSliderModule } from '@angular/material/slider';
+
+import { FormsModule } from '@angular/forms';
+
+import { RegistrationComponent } from './registration/registration.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
+
+
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -25,20 +39,39 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
+
+    MyOrdersComponent,
+
     NavbarComponent,
     DashboardComponent,
     FormsComponent,
     HomeComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatMenuModule,
+    MatCardModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSliderModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatToolbarModule,
+    
+
     AuthModule.forRoot({
       domain: 'dev-u4nrg-wp.us.auth0.com',
       clientId: 'XnuorVqaHw54eLqXctD3ddox70g2ddMD',
@@ -67,6 +100,7 @@ import { HomeComponent } from './components/home/home.component';
       useClass: AuthHttpInterceptor,
       multi: true,
     },
+
   ],
   bootstrap: [AppComponent]
 })

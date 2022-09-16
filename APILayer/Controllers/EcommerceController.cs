@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using BusinessLayer;
 using Microsoft.AspNetCore.Authorization;
-using RestSharp;
+
 
 namespace APILayer.Controllers
 {
@@ -36,13 +36,8 @@ namespace APILayer.Controllers
                 return Unauthorized("Wrong username or password");
             }
 
-            var client = new RestClient("https://dev-u4nrg-wp.us.auth0.com/oauth/token");
-            var request1 = new RestRequest("Post");
-            request1.AddHeader("content-type", "application/json");
-            request1.AddParameter("application/json", "{\"client_id\":\"smRz6cCOnyMgRDv4d5g3HAYM1pwBC06W\",\"client_secret\":\"gsxgugySdkMUEpaAsHkqiSMLuqIigeHF1HtUjvLMY21Er8gdP7Oj_Wd__RImRwyP\",\"audience\":\"https://localhost:7231/Ecommerce\",\"grant_type\":\"client_credentials\"}", ParameterType.RequestBody);
-            RestResponse response = client.Execute(request1);
-
-            return Ok(response);
+        
+            return Ok(u);
         }
 
         [HttpGet("user/{username}")]
