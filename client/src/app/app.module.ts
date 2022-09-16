@@ -31,6 +31,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { FormsComponent } from './components/forms/forms.component';
+import { MyCartComponent } from './components/my-cart/my-cart.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { FormsComponent } from './components/forms/forms.component';
     DashboardComponent,
     FormsComponent,
     HomeComponent,
-    
+    MyCartComponent,
+
   ],
   imports: [
     BrowserModule,

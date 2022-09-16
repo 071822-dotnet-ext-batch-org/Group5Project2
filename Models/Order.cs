@@ -11,7 +11,7 @@ namespace Models
         {
         }
 
-        public Order(Guid? orderID, decimal? orderTotal, DateTime? dateOrdered, DateTime? dateDelivered, bool? cancelled, bool? refunded, Guid? fK_UserID)
+        public Order(Guid? orderID, decimal? orderTotal, DateTime? dateOrdered, DateTime? dateDelivered, bool? cancelled, bool? refunded, string? fk_userID)
         {
             OrderID = orderID;
             OrderTotal = orderTotal;
@@ -19,7 +19,7 @@ namespace Models
             DateDelivered = dateDelivered;
             Cancelled = cancelled;
             Refunded = refunded;
-            FK_UserID = fK_UserID;
+            FK_UserID = fk_userID;
         }
 
         public Guid? OrderID {get; set;}
@@ -28,6 +28,6 @@ namespace Models
         public DateTime? DateDelivered {get; set;}
         public bool? Cancelled {get; set;}
         public bool? Refunded {get; set;}
-        public Guid? FK_UserID {get; set;}
+        public string? FK_UserID {get; set;}
     }
 }
