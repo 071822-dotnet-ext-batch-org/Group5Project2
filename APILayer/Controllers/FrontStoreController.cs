@@ -133,7 +133,7 @@ public class FrontStoreController : ControllerBase
 
 
     }//EoM
-    // create new order
+    // create new order by mohammad
       [HttpPost("CreateNewOrderAsync/create")]
     public async Task<ActionResult> CreateNewOrderAsync(UpdateNewOrderDto order)
     {
@@ -149,7 +149,7 @@ public class FrontStoreController : ControllerBase
             
 
     }
-    //update the account details
+    //update the account details by mohammad
      [HttpPost("UpdateAccountDetailsAsync/update")]
     public async Task<ActionResult> UpdateAccountDetailsAsync(Users user)
     {
@@ -186,7 +186,7 @@ public class FrontStoreController : ControllerBase
 
 
     }
-    // upload the product image
+    // upload the product image by Mohammad
     [HttpPut("upload/UpdateProductImageAsync")]
     public async Task<ActionResult> UpdateProductImageAsync(IFormFile imageFile, Guid productId)
     {
@@ -224,7 +224,7 @@ public class FrontStoreController : ControllerBase
 
 
 
-
+}
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
-
+namespace Models
+{
 public class UpdateNewOrderDto
 {
    
@@ -23,4 +24,4 @@ public class UpdateNewOrderDto
 
     }
 }
-}
+
