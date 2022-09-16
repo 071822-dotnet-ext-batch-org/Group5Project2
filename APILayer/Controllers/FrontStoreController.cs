@@ -139,25 +139,25 @@ public class FrontStoreController : ControllerBase
     {
 
 
-       Order? newOrder = await this._PostOrder.CreateNewOrderAsync(order);
+    //    Order? newOrder = await this._PostProduct.CreateNewOrderAsync(order);
 
         
-        var image = product.ProductImage;
+    //     var image = product.ProductImage;
 
-        if (newOrder == null) return NotFound(" Not able to create new order");
-        return Created("Order/{newOrder.OrderId}", newOrder);
-            
+    //     if (newOrder == null) return NotFound(" Not able to create new order");
+    //     return Created("Order/{newOrder.OrderId}", newOrder);
+            return BadRequest();
 
     }
     //update the account details by mohammad
      [HttpPost("UpdateAccountDetailsAsync/update")]
-    public async Task<ActionResult> UpdateAccountDetailsAsync(Users user)
+    public async Task<ActionResult> UpdateAccountDetailsAsync(User user)
     {
-        Users? usr = await this._PostOrder.CreateNewOrderAsync(user);
+        // User? usr = await this._PostOrder.CreateNewOrderAsync(user);
 
-        if (usr == null) return NotFound(" Not able to create new order");
-        return Created("Order/{newOrder.OrderId}", usr);
-
+        // if (usr == null) return NotFound(" Not able to create new order");
+        // return Created("Order/{newOrder.OrderId}", usr);
+        return BadRequest();
     }
 
 
@@ -169,57 +169,57 @@ public class FrontStoreController : ControllerBase
     public async Task<ActionResult> AddProductToCartAsync([FromForm] CartsProducts addtocart)
     {
 
-        CartsProducts addtocart1 = await this._PostProduct.AddProductToCartAsync(addtocart);
+        // CartsProducts addtocart1 = await this._PostProduct.AddProductToCartAsync(addtocart);
 
-        if (addtocart1 != null)
-        {
-
-
-            return Ok(new { status = true, message = "Product was inserted into cart Successfully." });
-
-        }
-        else
-        {
-
-            return BadRequest("This product has already being inserted into cart.");
-        }
+        // if (addtocart1 != null)
+        // {
 
 
+        //     return Ok(new { status = true, message = "Product was inserted into cart Successfully." });
+
+        // }
+        // else
+        // {
+
+        //     return BadRequest("This product has already being inserted into cart.");
+        // }
+
+        return BadRequest();
     }
     // upload the product image by Mohammad
     [HttpPut("upload/UpdateProductImageAsync")]
     public async Task<ActionResult> UpdateProductImageAsync(IFormFile imageFile, Guid productId)
     {
-        long fileLength = imageFile.Length;
+        // long fileLength = imageFile.Length;
 
-        if (fileLength < 0)
-        {
-            return BadRequest();
-        }
+        // if (fileLength < 0)
+        // {
+        //     return BadRequest();
+        // }
 
-        using Stream fileStream = imageFile.OpenReadStream();
+        // using Stream fileStream = imageFile.OpenReadStream();
 
-        if (await this._PostOrder.UpdateProductImageAsync(fileStream, productId))
-        {
-            return Created("photo updated", imageFile);
-        }
+        // if (await this._PostOrder.UpdateProductImageAsync(fileStream, productId))
+        // {
+        //     return Created("photo updated", imageFile);
+        // }
 
-        Products product1 = await this._PostProduct.InsertProductsAsync(product, Imagebyte);
+        // Products product1 = await this._PostProduct.InsertProductsAsync(product, Imagebyte);
 
-        if (product1 != null)
-        {
+        // if (product1 != null)
+        // {
 
 
-            return Ok(new { status = true, message = "Product Posted Successfully" });
+        //     return Ok(new { status = true, message = "Product Posted Successfully" });
 
-        }
-        else
-        {
+        // }
+        // else
+        // {
 
-            return BadRequest("This product already exists in the DataBase.");
-        }
+        //     return BadRequest("This product already exists in the DataBase.");
+        // }
 
-        
+        return BadRequest();
     }
 
 

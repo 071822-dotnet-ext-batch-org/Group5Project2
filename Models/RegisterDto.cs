@@ -29,6 +29,6 @@ namespace Models
         public string? ProfilePhone { get; set; }
         public string? ProfileEmail { get; set; }
         public IFormFile? ProfilePicture { get; set; }
-        public string? ErrorMessage {get; set;} = string.Empty;
+        public string? ErrorMessage = string.Empty;
     }
 }

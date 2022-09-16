@@ -304,43 +304,42 @@ namespace RepoLayer
                 conn.Open();
                 if ((await command.ExecuteNonQueryAsync()) == 1) {
                     conn.Close();
-                    Order oo = new Order(orderId, unod.OrderTotal, unod.DateOrder, unod.dateDelivered, unod.Cancelled, unod.Refunded);
+                    Order oo = new Order(orderId, unod.OrderTotal, unod.DateOrder, unod.dateDelivered, unod.Cancelled, unod.Refunded, null);
                     return oo;
 
                 }
                 return null;
-
-
-
-
-
-    }
-              public async Task<Users?> UpdateAccountDetailsAsync(Users user, Guid userId) {
-            using SqlCommand command = new SqlCommand("UPDATE Users SET UserID = @userID, UserName = @userName, userPassword = @UserPasswod", conn)
-            {
-            command.Parameters.AddWithValue("@userID", UserID);
-            command.Parameters.AddWithValue("@userName", user.UserName);
-            command.Parameters.AddWithValue("@userPassword", user.UserPassword);
-            conn.Open();
-            int ret = await command.ExecuteNonQueryAsync();
-            conn.Close();
-            if (ret < 1) return null;
-
-            return user;
+            }
 
         }
-            public async Task<bool> UpdateProductImage(byte[] photo, Guid PrproductID)
-{
-    using SqlCommand command = new SqlCommand("UPDATE [dbo].[Products] SET ProductImage = @ProductImage WHERE ProductID = @productId", conn);
-    command.Parameters.AddWithValue("@ProductImage", ProductImage);
-    command.Parameters.AddWithValue("@productId", ProductID);
+        public async Task<User?> UpdateAccountDetailsAsync(User user, Guid userId) 
+        {
+            using (SqlCommand command = new SqlCommand("UPDATE Users SET UserID = @userID, UserName = @userName, userPassword = @UserPasswod", conn))
+            {
+                command.Parameters.AddWithValue("@userID", userId);
+                command.Parameters.AddWithValue("@userName", user.Username);
+                command.Parameters.AddWithValue("@userPassword", user.Password);
+                conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                conn.Close();
+                if (ret < 1) return null;
 
-    conn.Open();
-    bool ret = (await command.ExecuteNonQueryAsync()) > 0;
-    conn.Close();
+                return user;
 
-    return ret;
-}
+            }
+        }
+            public async Task<bool> UpdateProductImage(byte[] photo, Guid ProductID)
+        {
+            using SqlCommand command = new SqlCommand("UPDATE [dbo].[Products] SET ProductImage = @ProductImage WHERE ProductID = @productId", conn);
+            command.Parameters.AddWithValue("@ProductImage", photo);
+            command.Parameters.AddWithValue("@productId", ProductID);
+
+            conn.Open();
+            bool ret = (await command.ExecuteNonQueryAsync()) > 0;
+            conn.Close();
+
+            return ret;
+        }
 
 }
 }

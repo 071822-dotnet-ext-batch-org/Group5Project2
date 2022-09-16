@@ -1,0 +1,44 @@
+.example-card {
+    max-width: 250px;
+    
+  }
+  
+  .example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+
+  .displayProducts{
+
+    padding: 30px;
+    
+  }
+
+  img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 250px;
+    margin-left: 0.5px;
+    
+  }
+  .displayhori{
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
+    flex-wrap:wrap;
+    margin: auto;
+    box-shadow: 5px 5px 5px 5px  #888888;
+    padding-top: 10px;
+}
+
+/* Remove list point */
+.removelist{
+  display: block;
+  text-align: center;
+}
+
+.cost{
+
+  color: blue;
+}

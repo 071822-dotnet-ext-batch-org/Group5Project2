@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using BusinessLayer;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace APILayer.Controllers
@@ -35,6 +36,7 @@ namespace APILayer.Controllers
                 return Unauthorized("Wrong username or password");
             }
 
+        
             return Ok(u);
         }
 

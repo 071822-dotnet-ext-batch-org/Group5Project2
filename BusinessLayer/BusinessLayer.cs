@@ -252,20 +252,20 @@ public class Bus : IBus
      public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr)
     {
          Guid id = Guid.NewGuid();
-        Order? e = await this._repoLayer.CreateNewOrderAsync(rr,id);
+        Order? e = await this._repo.CreateNewOrderAsync(rr,id);
        
         return e;
 }
-     public async Task<Users?> UpdateAccountDetailsAsync(Users user )
+     public async Task<User?> UpdateAccountDetailsAsync(User user )
     {
         Guid id = Guid.NewGuid();
-        Users? aa = await this._repoLayer.UpdateAccountDetailsAsync(user, id);
+        User? aa = await this._repo.UpdateAccountDetailsAsync(user, id);
         return aa;
 
     }
     public async Task<bool> UpdateProductImage(Stream file, Guid productId)
     {
-        Products? updatedTicket = await this._repoLayer.UpdateProductImage(productId);
+        Products? updatedTicket = await this._repo.UpdateProductImage(productId);
 
         if (UpdateProductImage == null) return false;
 
@@ -273,7 +273,7 @@ public class Bus : IBus
 
         byte[] photo = reader.ReadBytes((int)file.Length);
 
-        bool isSuccess = await this._repoLayer.UpdateProductImage(photo, productId);
+        bool isSuccess = await this._repo.UpdateProductImage(photo, productId);
 
         return isSuccess;
     }

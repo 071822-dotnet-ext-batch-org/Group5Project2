@@ -1,10 +1,8 @@
 ﻿using System;
 namespace Models
 {
-public class UpdateNewOrderDto
-{
-   
-  
+    public class UpdateNewOrderDto
+    {
         public UpdateNewOrderDto(Guid? orderId, decimal? orderTotal, DateTime? dateOrder, DateTime? dateDelivered, Boolean? cancelled, Boolean refunded)
         {
             OrderId = orderId;
@@ -21,7 +19,6 @@ public class UpdateNewOrderDto
         public DateTime? dateDelivered { get; set; }
         public Boolean? Cancelled { get; set; }
         public Boolean? Refunded { get; set; }
-
     }
 }
 
