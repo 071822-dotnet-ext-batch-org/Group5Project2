@@ -8,16 +8,15 @@ namespace BusinessLayer
 {
     public interface IBus
     {
-        Task<User?> LoginAsync(LoginDto request);
-        Task<UserInfoDto?> GetUserInfoAsync(string username);
-        Task<Stream?> GetUserPhotoAsync(string username);
-        Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request);
+        Task<User?> LoginAsync(string? userID);
+        Task<UserInfoDto?> GetUserInfoAsync(string? userID);
+        Task<UserInfoDto?> RegisterNewUserAsync(string? auth0id, string? name, string? email, string? picture);
         Task<List<Product?>> GetAllProductsAsync();
         Task<Stream?> GetProductImageAsync(Guid? request);
-        Task<Order?> CreateOrderAsync(Guid? userID);
-        Task<List<Order?>> GetMyOrdersAsync(Guid? userID);
+        Task<Order?> CreateOrderAsync(string? userID);
+        Task<List<Order?>> GetMyOrdersAsync(string? userID);
         Task<SingleOrderDto?> GetOrderAsync(Guid? orderID);
-        Task<MyCartDto?> GetMyCartAsync(Guid? userID);
-        Task<MyCartDto?> AddProductToCartAsync(Guid? userID, Guid? productID);
+        Task<MyCartDto?> GetMyCartAsync(string? userID);
+        Task<MyCartDto?> AddProductToCartAsync(string? userID, Guid? productID);
     }
 }

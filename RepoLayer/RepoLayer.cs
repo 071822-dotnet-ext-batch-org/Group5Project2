@@ -16,18 +16,18 @@ public class Repo : IRepo
         _conn = new SqlConnection(_config["ConnectionStrings:project2ApiDB"]);
     }
 
-    public async Task<User?> GetUserByUsernameAsync(string? username)
+    public async Task<User?> GetUserByUserIDAsync(string? userID)
     {
-        string sql = $"SELECT * FROM Users WHERE username = @username";
+        string sql = $"SELECT TOP 1 FROM Users WHERE userID = @userID";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
-            command.Parameters.AddWithValue("@username", username);
+            command.Parameters.AddWithValue("@userID", userID);
             _conn.Open();
 
             SqlDataReader? ret = await command.ExecuteReaderAsync();
             if (ret.Read())
             {
-                User u = new User(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetDateTime(3), ret.GetDateTime(4));
+                User u = new User(ret.GetString(0), ret.GetDateTime(3), ret.GetDateTime(4));
                 _conn.Close();
                 return u;
             }
@@ -37,10 +37,10 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<UserProfile?> GetProfileByUserIDAsync(Guid? userID)
+    public async Task<UserProfile?> GetProfileByUserIDAsync(string? userID)
     {
         
-        string sql = $"SELECT * FROM Profiles WHERE fk_userID = @userID";
+        string sql = $"SELECT TOP 1 FROM Profiles WHERE fk_userID = @userID";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
             command.Parameters.AddWithValue("@userID", userID);
@@ -49,7 +49,7 @@ public class Repo : IRepo
             SqlDataReader? ret = await command.ExecuteReaderAsync();
             if (ret.Read())
             {
-                UserProfile p = new UserProfile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetString(4), ret.GetStream(5), ret.GetGuid(6), ret.GetDateTime(7), ret.GetDateTime(8));
+                UserProfile p = new UserProfile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetString(4), ret.GetString(5), ret.GetString(6), ret.GetDateTime(7), ret.GetDateTime(8));
                 _conn.Close();
                 return p;
             }
@@ -59,35 +59,12 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<Stream?> GetProfilePictureByUserIDAsync(Guid? userID)
+    public async Task<User?> InsertUserAsync(string? userID)
     {
-        string sql = $"SELECT profilePicture FROM Profiles WHERE fk_userID = @userID";
+        string sql = $"INSERT INTO Users (userID) VALUES (@userID)";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
             command.Parameters.AddWithValue("@userID", userID);
-            _conn.Open();
-
-            SqlDataReader? ret = await command.ExecuteReaderAsync();
-            if (ret.Read())
-            {
-                Stream photo = ret.GetStream(0);
-                _conn.Close();
-                return photo;
-            }
-
-
-            _conn.Close();
-            return null;
-        }
-    }
-
-    public async Task<User?> InsertUserAsync(RegisterDto request)
-    {
-        string sql = $"INSERT INTO Users (username, password) VALUES (@username, @password)";
-        using (SqlCommand command = new SqlCommand(sql, _conn))
-        {
-            command.Parameters.AddWithValue("@username", request.Username);
-            command.Parameters.AddWithValue("@password", request.Password);
             
             _conn.Open();
             bool ret = (await command.ExecuteNonQueryAsync()) == 1;
@@ -98,24 +75,20 @@ public class Repo : IRepo
                 return null;
             }
 
-            return await GetUserByUsernameAsync(request.Username);
+            return await GetUserByUserIDAsync(userID);
         }
     }
 
 
-    public async Task<UserProfile?> InsertProfileAsync(RegisterDto request)
+    public async Task<UserProfile?> InsertProfileAsync(string? name, string? email, string? picture, string? userID)
     {
-        string sql = $"INSERT INTO Profiles (profileName, profileAddress, profilePhone, profileEmail, profilePicture, fk_userID) VALUES (@profileName, @profileAddress, @profilePhone, @profileEmail, @profilePicture, @fk_userID)";
-        Guid? userID = (await GetUserByUsernameAsync(request.Username))?.UserID;
-        Stream? profilePictureStream = request.ProfilePicture?.OpenReadStream();
+        string sql = $"INSERT INTO Profiles (profileName, profileEmail, profilePicture, fk_userID) VALUES (@profileName, @profileEmail, @profilePicture, @fk_userID)";
         
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
-            command.Parameters.AddWithValue("@profileName", request.ProfileName);
-            command.Parameters.AddWithValue("@profileAddress", request.ProfileAddress);
-            command.Parameters.AddWithValue("@profilePhone", request.ProfilePhone);
-            command.Parameters.AddWithValue("@profileEmail", request.ProfileEmail);
-            command.Parameters.AddWithValue("@profilePicture", profilePictureStream);
+            command.Parameters.AddWithValue("@profileName", name);
+            command.Parameters.AddWithValue("@profileEmail", email);
+            command.Parameters.AddWithValue("@profilePicture", picture);
             command.Parameters.AddWithValue("@fk_userID", userID);
 
             _conn.Open();
@@ -131,7 +104,7 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<Cart?> InsertCartAsync(Guid? userID)
+    public async Task<Cart?> InsertCartAsync(string? userID)
     {
         string sql = $"INSERT INTO Carts (cartTotal, cartItems, fk_userID) VALUES (0, 0, @fk_userID)";
         
@@ -152,7 +125,7 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<Cart?> GetCartByUserIDAsync(Guid? userID)
+    public async Task<Cart?> GetCartByUserIDAsync(string? userID)
     {
         string sql = $"SELECT * FROM Carts WHERE fk_userID = @fk_userID";
         
@@ -164,7 +137,7 @@ public class Repo : IRepo
             SqlDataReader? ret = await command.ExecuteReaderAsync();
             if (ret.Read())
             {
-                Cart c = new Cart(ret.GetGuid(0), (decimal)ret.GetSqlMoney(1), ret.GetInt32(2), ret.GetGuid(3));
+                Cart c = new Cart(ret.GetGuid(0), (decimal)ret.GetSqlMoney(1), ret.GetInt32(2), ret.GetString(3));
                 _conn.Close();
                 return c;
             }
@@ -286,7 +259,7 @@ public class Repo : IRepo
         return productList;
     }
 
-    public async Task<Order?> InsertOrderAsync(Guid orderID, Guid? userID, decimal? orderTotal)
+    public async Task<Order?> InsertOrderAsync(Guid orderID, string? userID, decimal? orderTotal)
     {
         string sql = $"INSERT INTO Orders (orderID, orderTotal, fk_userID) VALUES (@orderID, @orderTotal, @fk_userID)";
         using (SqlCommand command = new SqlCommand(sql, _conn))
@@ -345,7 +318,7 @@ public class Repo : IRepo
                     dateDelivered, 
                     cancelled, 
                     refunded,
-                    ret.GetGuid(6) 
+                    ret.GetString(6) 
                 );
 
                 _conn.Close();
@@ -404,7 +377,7 @@ public class Repo : IRepo
         return ret1 && ret2;
     }
 
-    public async Task<List<Order?>> GetMyOrdersAsync(Guid? userID)
+    public async Task<List<Order?>> GetMyOrdersAsync(string? userID)
     {
         string sql = $"SELECT * FROM Orders WHERE fk_userID = @userID";
         List<Order?> orderList = new List<Order?>();
@@ -431,7 +404,7 @@ public class Repo : IRepo
                     dateDelivered, 
                     ret.GetBoolean(4), 
                     ret.GetBoolean(5),
-                    ret.GetGuid(6) 
+                    ret.GetString(6) 
                 );
 
                 orderList.Add(order);

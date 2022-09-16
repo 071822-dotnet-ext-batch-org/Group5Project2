@@ -218,7 +218,7 @@ namespace RepoLayer
                     u.ProfileEmail = ret.GetString(4);
 
                     byte[] userImagebyte = (byte[])ret["ProfilePicture"];
-                    u.ProfilePicture = userImagebyte;
+                    u.ProfilePicture = string.Empty;
                     u.ProfileID = ret.GetGuid(6);
                     
                     conn.Close();
@@ -317,8 +317,7 @@ namespace RepoLayer
             using (SqlCommand command = new SqlCommand("UPDATE Users SET UserID = @userID, UserName = @userName, userPassword = @UserPasswod", conn))
             {
                 command.Parameters.AddWithValue("@userID", userId);
-                command.Parameters.AddWithValue("@userName", user.Username);
-                command.Parameters.AddWithValue("@userPassword", user.Password);
+
                 conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
                 conn.Close();

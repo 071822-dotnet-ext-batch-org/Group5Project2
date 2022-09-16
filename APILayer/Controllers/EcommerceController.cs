@@ -22,33 +22,28 @@ namespace APILayer.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string?>> LoginAsync(LoginDto request)
+        [Authorize]
+        public async Task<ActionResult<string?>> LoginAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            User? u = await this._bus.LoginAsync(request);
+            User? u = await this._bus.LoginAsync(auth0id);
 
             if(u == null)
             {
-                return Unauthorized("Wrong username or password");
+                return NotFound("User does not exist.");
             }
 
-        
             return Ok(u);
         }
 
-        [HttpGet("user/{username}")]
-        public async Task<ActionResult<string?>> GetUserInfoAsync(string username)
+        [HttpGet("user")]
+        [Authorize]
+        public async Task<ActionResult<string?>> GetUserInfoAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            UserInfoDto? u = await this._bus.GetUserInfoAsync(username);
+            UserInfoDto? u = await this._bus.GetUserInfoAsync(auth0id);
 
             if(u == null)
             {
@@ -58,50 +53,28 @@ namespace APILayer.Controllers
             return Ok(u);
         }
 
-        [HttpGet("user/{username}/photo")]
-        public async Task<ActionResult<Stream?>> GetUserPhotoAsync(string username)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            Stream? p = await this._bus.GetUserPhotoAsync(username);
-
-            if(p == null)
-            {
-                return NotFound("Photo not found");
-            }
-
-            return File(p, "image/png");
-        }
-
         [HttpPost("register")]
-        public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
+        [Authorize]
+        public async Task<ActionResult<UserInfoDto?>> RegisterAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
+            string? name = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/name"))?.Value;
+            string? email = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/email"))?.Value;
+            string? picture = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/picture"))?.Value;
 
-            UserInfoDto? u = await this._bus.RegisterNewUserAsync(request);
+            UserInfoDto? u = await this._bus.RegisterNewUserAsync(auth0id, name, email, picture);
 
             if (u?.ErrorMessage != String.Empty)
             {
                 return Unauthorized(u?.ErrorMessage);
             }
 
-            return Created($"/user/{request.Username}", u);
+            return Created($"/my-profile", u);
         }
 
         [HttpGet("products")]
         public async Task<ActionResult<List<Product?>>> GetAllProductsAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             List<Product?> p = await this._bus.GetAllProductsAsync();
 
             return Ok(p);
@@ -126,14 +99,12 @@ namespace APILayer.Controllers
         }
 
         [HttpPost("create-order")]
-        public async Task<ActionResult<Order?>> CreateOrderAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<Order?>> CreateOrderAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            Order? o = await this._bus.CreateOrderAsync(userID);
+            Order? o = await this._bus.CreateOrderAsync(auth0id);
 
             if(o == null)
             {
@@ -144,19 +115,18 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("my-orders")]
-        public async Task<ActionResult<List<Order?>>> GetMyOrdersAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<List<Order?>>> GetMyOrdersAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            List<Order?> o = await this._bus.GetMyOrdersAsync(userID);
+            List<Order?> o = await this._bus.GetMyOrdersAsync(auth0id);
 
             return Ok(o);
         }
 
         [HttpGet("my-orders/{orderID}")]
+        [Authorize]
         public async Task<ActionResult<SingleOrderDto?>> GetOrderAsync(Guid? orderID)
         {
             if(!ModelState.IsValid)
@@ -175,14 +145,12 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("my-cart")]
-        public async Task<ActionResult<MyCartDto?>> GetMyCartAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<MyCartDto?>> GetMyCartAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            MyCartDto? c = await this._bus.GetMyCartAsync(userID);
+            MyCartDto? c = await this._bus.GetMyCartAsync(auth0id);
 
             if (c == null)
             {
@@ -193,14 +161,17 @@ namespace APILayer.Controllers
         }
 
         [HttpPost("my-cart/addItem/{productID}")]
-        public async Task<ActionResult<MyCartDto?>> AddProductToCartAsync(Guid? userID, Guid? productID)
+        [Authorize]
+        public async Task<ActionResult<MyCartDto?>> AddProductToCartAsync(Guid? productID)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            MyCartDto? c = await this._bus.AddProductToCartAsync(userID, productID);
+            string? auth0id = User.Identity?.Name;
+
+            MyCartDto? c = await this._bus.AddProductToCartAsync(auth0id, productID);
 
             if (c==null)
             {

@@ -4,6 +4,8 @@ using System.Configuration;
 using RepoLayer;
 using BusinessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,28 +30,27 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, c =>
-    {
-        c.Authority = $"https://{builder.Configuration["Auth0:Domain"]}";
-        c.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidAudience = builder.Configuration["Auth0:ApiIdentifier"],
-            ValidIssuer = builder.Configuration["Auth0:Domain"]
-        };
-    });
-
-builder.Services.AddAuthorization(o =>
+builder.Services.AddAuthentication( options =>
 {
-    o.AddPolicy("userID:read", p => p.
-        RequireAuthenticatedUser()
-    );
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = builder.Configuration["Auth0:Domain"];
+    options.Audience = builder.Configuration["Auth0:Audience"];
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        NameClaimType = ClaimTypes.NameIdentifier
+    };
+});
+
+builder.Services.AddAuthorization( options =>
+{
+    options.AddPolicy("weatherForecast: read-write", p =>
+        p.RequireAuthenticatedUser());
 });
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,8 +58,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseCors("MyAllowAllOrigins");
 
