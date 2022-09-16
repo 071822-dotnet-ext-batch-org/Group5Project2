@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using RepoLayer;
 using BusinessLayer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,25 @@ builder.Services.AddCors(options =>
     });
 });
 
-var config = builder.Configuration["ConnectionStrings:project2ApiDB"];
 
-Console.WriteLine("This is a connection test: " + builder.Configuration["ConnectionStrings:project2ApiDB"]);
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, c =>
+    {
+        c.Authority = $"https://{builder.Configuration["Auth0:Domain"]}";
+        c.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidAudience = builder.Configuration["Auth0:ApiIdentifier"],
+            ValidIssuer = builder.Configuration["Auth0:Domain"]
+        };
+    });
+
+builder.Services.AddAuthorization(o =>
+{
+    o.AddPolicy("userID:read", p => p.
+        RequireAuthenticatedUser()
+    );
+});
 
 var app = builder.Build();
 
@@ -42,9 +58,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseCors("MyAllowAllOrigins");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

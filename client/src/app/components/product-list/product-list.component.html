@@ -1,0 +1,29 @@
+
+<ul>
+    <div class="displayhori">
+      <li class="removelist" *ngFor="let product of products">
+    
+       <div class="displayProducts">
+        <mat-card class="example-card">
+          <mat-card-header>
+            <mat-card-title>{{product.productName}}</mat-card-title>   
+          </mat-card-header>
+          <img class = "img" mat-card-image src= "https://localhost:7231/Ecommerce/product/{{product.productID}}/image">
+          <mat-card-content>
+            <p>
+             <span class="cost">Cost:</span> {{product.productPrice}} : Stock: {{product.stock}} : Product ID {{product.productID}}
+            </p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>LIKE</button>
+            <button mat-button>SHARE</button>
+            <button mat-button>SHOP</button>
+          </mat-card-actions>
+        </mat-card>    
+        </div>
+  
+    </li>
+  </div>
+  </ul>
+  
+  

@@ -1,7 +1,9 @@
+import { ProductListService } from './../Services/product-list-service/product-list.service';
+import { ProductListComponent } from './../components/product-list/product-list.component';
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { EcommerceAPIService } from '../Services/ecommerce-api.service';
+
 
 @Component({
   selector: 'app-my-orders',
@@ -13,7 +15,7 @@ export class MyOrdersComponent implements OnInit {
   getPriorOrders!: string;
   userID!: any;
   
-  constructor(private EcommerceAPI: EcommerceAPIService) { }
+  constructor(private EcommerceAPI: ProductListService) { }
 
   ngOnInit(): void {
     

@@ -14,7 +14,7 @@ import { from } from 'rxjs';
 
 
 export class AppComponent {
-  title = 'client';
 
+  title = 'Amazon 2 Electric Boogaloo';
 
 }

@@ -1,38 +1,64 @@
 import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { MatSliderModule } from '@angular/material/slider';
+
+import { FormsModule } from '@angular/forms';
+
+import { RegistrationComponent } from './registration/registration.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
+
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { ProductListComponent } from './product-list/product-list.component';
-import { MatButtonModule} from '@angular/material/button';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RegistrationComponent } from './registration/registration.component';
-import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { FormsComponent } from './components/forms/forms.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
-    RegistrationComponent,
-    MyOrdersComponent
+
+    MyOrdersComponent,
+
+    NavbarComponent,
+    DashboardComponent,
+    FormsComponent,
+    HomeComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -44,14 +70,38 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,
-    RouterModule.forRoot([
-      
-      {path: '', component:ProductListComponent},
-      {path: 'registration', component: RegistrationComponent},
-      {path: 'my-orders', component: MyOrdersComponent},
-    ])
+    
+
+    AuthModule.forRoot({
+      domain: 'dev-u4nrg-wp.us.auth0.com',
+      clientId: 'XnuorVqaHw54eLqXctD3ddox70g2ddMD',
+      audience: 'http://localhost:7163',
+      httpInterceptor: {
+        allowedList: ['https://localhost:7163/Ecommerce']
+      }
+    }),
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+    },
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

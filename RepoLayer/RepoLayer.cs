@@ -176,7 +176,7 @@ public class Repo : IRepo
 
     public async Task<List<Product?>> GetAllProductsAsync()
     {
-        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified FROM Products";
+        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified, productImage FROM Products";
         List<Product?> productList = new List<Product?>();
 
         using (SqlCommand command = new SqlCommand(sql, _conn))
@@ -207,7 +207,7 @@ public class Repo : IRepo
 
     public async Task<Product?> GetProductByProductIDAsync(Guid? productID)
     {
-        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified FROM Products WHERE productID = @productID";
+        string sql = $"SELECT productID, productName, productPrice, productDetails, stockDate, stock, dateCreated, dateModified, productImage FROM Products WHERE productID = @productID";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
             command.Parameters.AddWithValue("@productID", productID);
@@ -497,5 +497,25 @@ public class Repo : IRepo
         }
 
         return ret1 && ret2;
+    }
+
+    public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<User?> UpdateAccountDetailsAsync(User user, Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Products?> UpdateProductImage(Guid productId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> UpdateProductImage(byte[] photo, Guid productId)
+    {
+        throw new NotImplementedException();
     }
 }

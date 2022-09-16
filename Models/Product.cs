@@ -15,6 +15,7 @@ namespace Models
         public int? Stock {get; set;}
         public DateTime? DateCreated {get; set;}
         public DateTime? DateModified {get; set;}
+    
 
         public Product()
         {
