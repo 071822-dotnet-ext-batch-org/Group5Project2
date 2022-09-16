@@ -10,7 +10,7 @@ export class ProductListComponent implements OnInit {
 
   products: any;
   userregister: any;
-  data: any;
+ 
   
 
   constructor(private PLS: ProductListService) { }
@@ -21,7 +21,7 @@ export class ProductListComponent implements OnInit {
   }
 
   displayProducts(): void {
-    this.PLS.getProducts().subscribe(data => {
+    this.PLS.getProducts().subscribe((data: any) => {
       this.products = data;
     })
   }

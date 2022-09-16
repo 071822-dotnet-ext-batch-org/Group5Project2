@@ -1,3 +1,4 @@
+
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
@@ -43,6 +44,7 @@ import { MyCartComponent } from './components/my-cart/my-cart.component';
     FormsComponent,
     HomeComponent,
     MyCartComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -8,10 +8,9 @@ import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 
 const routes: Routes = [
   {path: '', component:ProductListComponent},
-  {path: 'my-orders', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'my-cart', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'my-profile', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: 'my-orders', component: MyOrdersComponent},
+  {path: 'my-orders', component: MyOrdersComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
