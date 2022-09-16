@@ -48,20 +48,25 @@ export class MyOrdersComponent implements OnInit {
   }
   
    
-  displayOrdersById(): void {
-    this.EcommerceAPI.getProducts().subscribe(data => {
-      this.orderID = data;
-    })
-  }
 
+  displayOrderedProducts(orderID : string){
 
-  getproducts(orderID : string){
     this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
       this.orderproduct = data;
 
   })
  }
   
+ getallproductOrders(){
+
+  this.orderproduct;
+  console.log(this?.orderproduct);
+  var getOrderedproduct = JSON.stringify(this.orderproduct);
+  return getOrderedproduct;
+  
+}
+
+
   
 
 }
