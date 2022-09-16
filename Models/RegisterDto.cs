@@ -12,23 +12,18 @@ namespace Models
         {
         }
 
-        public RegisterDto(string? username, string? password, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, IFormFile? profilePicture)
+        public RegisterDto(string? userID, string? profileName, string? profileEmail, string? profilePicture)
         {
-            Username = username;
-            Password = password;
+            UserID = userID;
             ProfileName = profileName;
-            ProfileAddress = profileAddress;
-            ProfilePhone = profilePhone;
             ProfileEmail = profileEmail;
+            ProfilePicture = profilePicture;
         }
 
-        public string? Username {get; set;}
-        public string? Password {get; set;}
+        public string? UserID { get; set; }
         public string? ProfileName { get; set; }
-        public string? ProfileAddress { get; set; }
-        public string? ProfilePhone { get; set; }
         public string? ProfileEmail { get; set; }
-        public IFormFile? ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
         public string? ErrorMessage = string.Empty;
     }
 }

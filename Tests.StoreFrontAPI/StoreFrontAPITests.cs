@@ -88,7 +88,7 @@ namespace Tests.StoreFrontAPI
                 ProfileAddress = "20 ken dr",
                 ProfilePhone = "713992867",
                 ProfileEmail = "ken@yahoo.com",
-                Fk_UserID = guid
+                Fk_UserID = "auth0test1"
 
 
             };

@@ -109,7 +109,7 @@ public class FrontStoreController : ControllerBase
         if (image != null)
         {
             await using var memoryStream = new MemoryStream();
-            await image!.CopyToAsync(memoryStream);
+            // await image!.CopyToAsync(memoryStream);
             UserImagebyte = memoryStream.ToArray();
 
         }

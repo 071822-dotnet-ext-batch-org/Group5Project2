@@ -13,21 +13,16 @@ public class Bus : IBus
         _repo = repo;
     }
 
-    public async Task<User?> LoginAsync(LoginDto request)
+    public async Task<User?> LoginAsync(string? userID)
     {
-        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
-
-        if (u == null || u.Password != request.Password)
-        {
-            return null;
-        }
+        User? u = await this._repo.GetUserByUserIDAsync(userID);
 
         return u;
     }
 
-    public async Task<UserInfoDto?> GetUserInfoAsync(string request)
+    public async Task<UserInfoDto?> GetUserInfoAsync(string? userID)
     {
-        User? u = await this._repo.GetUserByUsernameAsync(request);
+        User? u = await this._repo.GetUserByUserIDAsync(userID);
 
         if (u == null)
         {
@@ -48,44 +43,23 @@ public class Bus : IBus
             return null;
         }
 
-        bool hasProfilePicture = (p?.ProfilePicture?.Length > 0);
-
-        UserInfoDto uidto = new UserInfoDto(u.UserID, u.Username, p?.ProfileID, p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c.CartID, hasProfilePicture);
+        UserInfoDto uidto = new UserInfoDto(p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c.CartID, p?.ProfilePicture);
         
         return uidto;
     }
 
-    public async Task<Stream?> GetUserPhotoAsync(string request)
+    public async Task<UserInfoDto?> RegisterNewUserAsync(string? userID, string? name, string? email, string? picture)
     {
-        User? u = await this._repo.GetUserByUsernameAsync(request);
-
-        if (u == null)
-        {
-            return null;
-        }
-
-        Stream? photo = await this._repo.GetProfilePictureByUserIDAsync(u.UserID);
-
-        if (photo?.Length == 0 || photo == null)
-        {
-            return null;
-        }
-
-        return photo;
-    }
-
-    public async Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request)
-    {
-        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
+        User? u = await this._repo.GetUserByUserIDAsync(userID);
         UserInfoDto uidto = new UserInfoDto();
 
         if (u != null)
         {
-            uidto.ErrorMessage = "Username already taken";
+            uidto.ErrorMessage = "Username already exists";
             return uidto;
         }
 
-        User? nu = await this._repo.InsertUserAsync(request);
+        User? nu = await this._repo.InsertUserAsync(userID);
 
         if (nu == null)
         {
@@ -93,7 +67,7 @@ public class Bus : IBus
             return uidto;
         }
 
-        UserProfile? np = await this._repo.InsertProfileAsync(request);
+        UserProfile? np = await this._repo.InsertProfileAsync(name, email, picture, userID);
         
         if (np == null)
         {
@@ -101,7 +75,7 @@ public class Bus : IBus
             return uidto;
         }
 
-        Cart? c = await this._repo.InsertCartAsync(nu.UserID);
+        Cart? c = await this._repo.InsertCartAsync(userID);
 
         if (c == null)
         {
@@ -109,23 +83,11 @@ public class Bus : IBus
             return uidto;
         }
         
-        uidto.UserID = nu.UserID;
-        uidto.Username = nu.Username;
-        uidto.ProfileID = np.ProfileID;
         uidto.ProfileName = np.ProfileName;
-        uidto.ProfileAddress = np.ProfileAddress;
         uidto.ProfilePhone = np.ProfilePhone;
         uidto.ProfileEmail = np.ProfileEmail;
+        uidto.ProfilePicture = np.ProfilePicture;
         uidto.CartID = c.CartID;
-
-        if (np?.ProfilePicture?.Length > 0)
-        {
-            uidto.HasProfilePicture = true;
-        } 
-        else 
-        {
-            uidto.HasProfilePicture = false;
-        }
 
         return uidto;
     }
@@ -154,7 +116,7 @@ public class Bus : IBus
         return image;
     }
 
-    public async Task<Order?> CreateOrderAsync(Guid? userID)
+    public async Task<Order?> CreateOrderAsync(string? userID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
@@ -195,7 +157,7 @@ public class Bus : IBus
         return o;
     }
 
-    public async Task<List<Order?>> GetMyOrdersAsync(Guid? userID)
+    public async Task<List<Order?>> GetMyOrdersAsync(string? userID)
     {
         return await this._repo.GetMyOrdersAsync(userID);
     }
@@ -214,7 +176,7 @@ public class Bus : IBus
         return new SingleOrderDto(productList, o);
     }
 
-    public async Task<MyCartDto?> GetMyCartAsync(Guid? userID)
+    public async Task<MyCartDto?> GetMyCartAsync(string? userID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
         
@@ -228,7 +190,7 @@ public class Bus : IBus
         return new MyCartDto(productList, c);
     }
 
-    public async Task<MyCartDto?> AddProductToCartAsync(Guid? userID, Guid? productID)
+    public async Task<MyCartDto?> AddProductToCartAsync(string? userID, Guid? productID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
