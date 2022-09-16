@@ -130,7 +130,7 @@ namespace RepoLayer
 
         public async Task<List<ProductDto?>> GetAllProductsAsync()
         {
-            SqlConnection conn = new SqlConnection("Server=tcp:emma22.database.windows.net,1433;Initial Catalog=Project2;Persist Security Info=False;User ID=nwaodec79;Password=ECNsoftware_2212;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Products", conn))
             {          
                 conn.Open();

@@ -18,13 +18,15 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RegistrationComponent } from './registration/registration.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    MyOrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,7 @@ import { RegistrationComponent } from './registration/registration.component';
       
       {path: '', component:ProductListComponent},
       {path: 'registration', component: RegistrationComponent},
-      
+      {path: 'my-orders', component: MyOrdersComponent},
     ])
   ],
   providers: [],

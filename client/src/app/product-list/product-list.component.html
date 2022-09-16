@@ -1,11 +1,3 @@
-<!-- <button (click)="displayProducts()">Products</button> -->
-
-<!-- <a class="nav-link" [routerLink]="['/home']" (click)="displayProducts()">Home</a> -->
-
-<!-- <a class="nav-link" [routerLink]="['http://localhost:4200/']" (click)="displayProducts()">Home</a> -->
-<!-- <ul>
-    <li *ngFor="let product of products">{{product.productName}}</li>
-</ul> -->
 
 <ul>
   <div class="displayhori">
@@ -16,7 +8,7 @@
         <mat-card-header>
           <mat-card-title>{{product.productName}}</mat-card-title>   
         </mat-card-header>
-        <img class = "img" mat-card-image src= "data:image/png;base64,{{product.productImage}}">
+        <img class = "img" mat-card-image src= "https://localhost:7231/Ecommerce/product/{{product.productID}}/image">
         <mat-card-content>
           <p>
            <span class="cost">Cost:</span> {{product.productPrice}} : Stock: {{product.stock}} : Product ID {{product.productID}}
