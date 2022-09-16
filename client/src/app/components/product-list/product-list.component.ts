@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EcommerceAPIService } from '../../Services/ecommerce-api.service';
+import { ProductListService } from '../../Services/product-list-service/product-list.service';
 
 @Component({
   selector: 'app-product-list',
@@ -10,13 +10,13 @@ export class ProductListComponent implements OnInit {
 
   products: any;
 
-  constructor(private EcommerceAPI: EcommerceAPIService) { }
+  constructor(private PLS: ProductListService) { }
 
   ngOnInit(): void {
   }
 
   displayProducts(): void {
-    this.EcommerceAPI.getProducts().subscribe(data => {
+    this.PLS.getProducts().subscribe(data => {
       this.products = data;
     })
   }
