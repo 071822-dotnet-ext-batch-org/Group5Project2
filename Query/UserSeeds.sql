@@ -1,9 +1,4 @@
 DELETE FROM Profiles;
-DELETE FROM Users;
-
-INSERT INTO Users (userID) VALUES ('auth0test1');
-INSERT INTO Users (userID) VALUES ('auth0test2');
-INSERT INTO Users (userID) VALUES ('auth0test3');
 
 INSERT INTO Profiles (profileName, profileAddress, profilePhone, profileEmail, fk_userID, profilePicture)
 VALUES ('John Wick', '123 Arroyo Lane', '123-456-7890', 'mydogisdead@email.com', 'auth0test1', 'http://placekitten.com/200/300');

@@ -149,19 +149,6 @@ public class FrontStoreController : ControllerBase
             return BadRequest();
 
     }
-    //update the account details by mohammad
-     [HttpPost("UpdateAccountDetailsAsync/update")]
-    public async Task<ActionResult> UpdateAccountDetailsAsync(User user)
-    {
-        // User? usr = await this._PostOrder.CreateNewOrderAsync(user);
-
-        // if (usr == null) return NotFound(" Not able to create new order");
-        // return Created("Order/{newOrder.OrderId}", usr);
-        return BadRequest();
-    }
-
-
-
 
     //This API will insert buyers products into cart
     [HttpPost("AddProductToCartAsync")]

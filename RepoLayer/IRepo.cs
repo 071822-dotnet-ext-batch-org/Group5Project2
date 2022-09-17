@@ -8,9 +8,7 @@ namespace RepoLayer
 {
     public interface IRepo
     {
-        Task<User?> GetUserByUserIDAsync(string? userID);
         Task<UserProfile?> GetProfileByUserIDAsync(string? userID);
-        Task<User?> InsertUserAsync(string? userID);
         Task<UserProfile?> InsertProfileAsync(string? name, string? email, string? picture, string? userID);
         Task<Cart?> InsertCartAsync(string? userID);
         Task<Cart?> GetCartByUserIDAsync(string? userID);
@@ -26,7 +24,6 @@ namespace RepoLayer
         Task<List<Product?>> GetProductsInOrderAsync(Guid? orderID);
         Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID);
         Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id);
-        Task<User?> UpdateAccountDetailsAsync(User user, Guid id);
         Task<Products?> UpdateProductImage(Guid productId);
         Task<bool> UpdateProductImage(byte[] photo, Guid productId);
     }

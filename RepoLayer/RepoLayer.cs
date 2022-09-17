@@ -16,31 +16,10 @@ public class Repo : IRepo
         _conn = new SqlConnection(_config["ConnectionStrings:project2ApiDB"]);
     }
 
-    public async Task<User?> GetUserByUserIDAsync(string? userID)
-    {
-        string sql = $"SELECT TOP 1 FROM Users WHERE userID = @userID";
-        using (SqlCommand command = new SqlCommand(sql, _conn))
-        {
-            command.Parameters.AddWithValue("@userID", userID);
-            _conn.Open();
-
-            SqlDataReader? ret = await command.ExecuteReaderAsync();
-            if (ret.Read())
-            {
-                User u = new User(ret.GetString(0), ret.GetDateTime(3), ret.GetDateTime(4));
-                _conn.Close();
-                return u;
-            }
-
-            _conn.Close();
-            return null;
-        }
-    }
-
     public async Task<UserProfile?> GetProfileByUserIDAsync(string? userID)
     {
         
-        string sql = $"SELECT TOP 1 FROM Profiles WHERE fk_userID = @userID";
+        string sql = $"SELECT TOP (1) * FROM Profiles WHERE fk_userID = @userID";
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
             command.Parameters.AddWithValue("@userID", userID);
@@ -59,30 +38,9 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<User?> InsertUserAsync(string? userID)
-    {
-        string sql = $"INSERT INTO Users (userID) VALUES (@userID)";
-        using (SqlCommand command = new SqlCommand(sql, _conn))
-        {
-            command.Parameters.AddWithValue("@userID", userID);
-            
-            _conn.Open();
-            bool ret = (await command.ExecuteNonQueryAsync()) == 1;
-            _conn.Close();
-
-            if (!ret)
-            {   
-                return null;
-            }
-
-            return await GetUserByUserIDAsync(userID);
-        }
-    }
-
-
     public async Task<UserProfile?> InsertProfileAsync(string? name, string? email, string? picture, string? userID)
     {
-        string sql = $"INSERT INTO Profiles (profileName, profileEmail, profilePicture, fk_userID) VALUES (@profileName, @profileEmail, @profilePicture, @fk_userID)";
+        string sql = $"INSERT INTO Profiles (profileName, profileEmail, profilePicture, fk_userID, profilePhone, profileAddress) VALUES (@profileName, @profileEmail, @profilePicture, @fk_userID, @profilePhone, @profileAddress)";
         
         using (SqlCommand command = new SqlCommand(sql, _conn))
         {
@@ -90,6 +48,8 @@ public class Repo : IRepo
             command.Parameters.AddWithValue("@profileEmail", email);
             command.Parameters.AddWithValue("@profilePicture", picture);
             command.Parameters.AddWithValue("@fk_userID", userID);
+            command.Parameters.AddWithValue("@profilePhone", string.Empty);
+            command.Parameters.AddWithValue("@profileAddress", string.Empty);
 
             _conn.Open();
             bool ret = (await command.ExecuteNonQueryAsync()) == 1;
@@ -473,11 +433,6 @@ public class Repo : IRepo
     }
 
     public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<User?> UpdateAccountDetailsAsync(User user, Guid id)
     {
         throw new NotImplementedException();
     }

@@ -11,16 +11,19 @@
           <img class = "img" mat-card-image src= "https://localhost:7231/Ecommerce/product/{{product.productID}}/image">
           <mat-card-content>
             <p>
-             <span class="cost">Cost:</span> {{product.productPrice}} : Stock: {{product.stock}} : Product ID {{product.productID}}
+              {{product.productPrice | currency}}
             </p>
           </mat-card-content>
           <mat-card-actions>
+
             <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
               <mat-icon>favorite</mat-icon></button>
             <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
               <mat-icon>share</mat-icon></button>  
             <button  mat-icon-button class="shopcartonimage" color="warn" aria-label="Example icon button with a heart icon">
               <a href="https://localhost:7231/Ecommerce/my-cart/addItem/{{product.productID}}"><mat-icon>add_shopping_cart</mat-icon> </a></button> 
+            <button *ngIf="(auth.isAuthenticated$ | async) === true" mat-button (click)="addToCart(product.productID)">Add To Cart</button>
+
           </mat-card-actions>
         </mat-card>    
         </div>
