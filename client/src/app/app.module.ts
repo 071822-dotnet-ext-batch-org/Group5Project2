@@ -72,7 +72,9 @@ import { baseURL } from './Services/base-url';
       httpInterceptor: {
         allowedList: [
           baseURL + '/user',
-          baseURL + '/my-cart/addItem'
+          baseURL + '/my-cart/addItem',
+          baseURL + '/my-orders',
+          baseURL + '/my-orders/*',
         ]
       }
     }),

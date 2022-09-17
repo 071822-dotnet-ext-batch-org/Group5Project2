@@ -1,6 +1,3 @@
-export interface OrderID{
-    orderID: string;
-}
 
 export interface Orders{
     orderID: string;
