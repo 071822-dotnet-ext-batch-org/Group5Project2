@@ -1,4 +1,4 @@
-import { OrderID } from './../../Models/OrderID';
+import { Orders } from '../../Models/Orders';
 
 
 import { Injectable } from '@angular/core';
@@ -23,18 +23,20 @@ export class ProductListService {
   }
 
    
-  //Get previous orders by user ID
-  public getPriorOrdersByUserID(userOrderID: string): Observable<string> {
+  //Display orders 
+  public getOrders(): Observable<Orders[]> {
     
-    return this.http.get<string>(`${baseURL}/my-orders?userID=` + userOrderID)
+    return this.http.get<Orders[]>(`${baseURL}/my-orders`)
     
   }
   
-  //Display order by order ID
-  public getOrdersById(orderID : string): Observable<string> {
 
-    return this.http.get<string>(baseURL + '/my-orders' + orderID)
 
+  //Display product orders by ID
+  public getOrdersById(orderID : any): Observable<any> {
+    
+    return this.http.get<any>(`${baseURL}/my-orders/` + orderID)
+    
   }
 
   
