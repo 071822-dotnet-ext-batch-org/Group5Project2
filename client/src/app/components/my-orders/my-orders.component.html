@@ -27,8 +27,10 @@
           <th>Cancelled Order</th>
           <th>Refunded Order</th>
         </tr>
+
+
         <tr *ngFor="let order of Orders" (click)="displayOrderedProducts(order.orderID)" class="orderIsclick" >
-       
+
           <td>{{order.orderTotal}}</td>
           <td>{{order.dateOrdered}}</td>
           <td>{{order.dateDelivered}}</td>
