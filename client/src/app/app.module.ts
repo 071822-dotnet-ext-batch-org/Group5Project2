@@ -32,6 +32,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FormsComponent } from './components/forms/forms.component';
 import { MyCartComponent } from './components/my-cart/my-cart.component';
 import { baseURL } from './Services/base-url';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { baseURL } from './Services/base-url';
     FormsComponent,
     HomeComponent,
     MyCartComponent,
+    ProfileComponent,
 
   ],
   imports: [
@@ -73,8 +75,10 @@ import { baseURL } from './Services/base-url';
         allowedList: [
           baseURL + '/user',
           baseURL + '/my-cart/addItem',
+
           baseURL + '/my-orders',
           baseURL + '/my-orders/*',
+
         ]
       }
     }),

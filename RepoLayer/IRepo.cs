@@ -26,5 +26,7 @@ namespace RepoLayer
         Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id);
         Task<Products?> UpdateProductImage(Guid productId);
         Task<bool> UpdateProductImage(byte[] photo, Guid productId);
+        Task<bool> UpdateUserAddressAsync(string? userID, string address);
+        Task<bool> UpdateUserPhoneAsync(string? userID, string phone);
     }
 }

@@ -178,4 +178,30 @@ public class Bus : IBus
 
         return isSuccess;
     }
+
+    public async Task<UserProfile?> UpdateUserInfoAsync(string? userID, UpdateUserInfoDto request)
+    {
+        if(request.Address == null && request.Phone == null)
+        {
+            return null;
+        }
+
+        if(request.Address != null)
+        {
+            if(await this._repo.UpdateUserAddressAsync(userID, request.Address))
+            {
+                return await this._repo.GetProfileByUserIDAsync(userID);
+            }
+        }
+        
+        if(request.Phone != null)
+        {
+            if(await this._repo.UpdateUserPhoneAsync(userID, request.Phone))
+            {
+                return await this._repo.GetProfileByUserIDAsync(userID);
+            }
+        }
+
+        return null;
+    }
 }

@@ -11,7 +11,14 @@ namespace Models
         {
         }
 
-        public UserInfoDto(string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Cart? cart, string? profilePicture)
+        public UserInfoDto(
+            string? profileName, 
+            string? profileAddress, 
+            string? profilePhone, 
+            string? profileEmail, 
+            Cart? cart, 
+            string? profilePicture
+        )
         {
             ProfileName = profileName;
             ProfileAddress = profileAddress;
@@ -20,6 +27,7 @@ namespace Models
             ProfilePicture = profilePicture;
             Cart = cart;
         }
+
         public string? ProfileName {get; set;}
         public string? ProfileAddress {get; set;}
         public string? ProfilePhone {get; set;}

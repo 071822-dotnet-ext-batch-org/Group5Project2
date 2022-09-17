@@ -8,8 +8,8 @@
       <a mat-list-item routerLink="/my-profile" routerLineActive="active" *ngIf="(auth.isAuthenticated$ | async)">Welcome, {{myName}}!</a>
       <a mat-list-item routerLink="/" routerLineActive="active">Products</a>
       <a mat-list-item routerLink="/my-orders" routerLineActive="active" *ngIf="(auth.isAuthenticated$ | async) === true">My Orders</a>
-      <a mat-list-item routerLink="/my-cart" routerLineActive="active" *ngIf="(auth.isAuthenticated$ | async) === true">My Cart({{cartItems}})</a>
       <a mat-list-item routerLink="/my-profile" routerLineActive="active" *ngIf="(auth.isAuthenticated$ | async) === true">My Profile</a>
+      <a mat-list-item routerLink="/my-cart" routerLineActive="active" *ngIf="(auth.isAuthenticated$ | async) === true">Checkout <mat-icon>shopping_cart</mat-icon> ({{cartItems}})</a>
       <a mat-list-item *ngIf="(auth.isAuthenticated$ | async) === false" (click)="login()">Login</a>
       <a mat-list-item *ngIf="(auth.isAuthenticated$ | async) === false" (click)="signup()">Sign up</a>
       <a mat-list-item *ngIf="(auth.isAuthenticated$ | async) === true" (click)="logout()">Logout</a>
