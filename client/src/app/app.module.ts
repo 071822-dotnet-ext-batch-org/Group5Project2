@@ -27,11 +27,10 @@ import { AppComponent } from './app.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { FormsComponent } from './components/forms/forms.component';
 import { MyCartComponent } from './components/my-cart/my-cart.component';
-
+import { baseURL } from './Services/base-url';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,6 @@ import { MyCartComponent } from './components/my-cart/my-cart.component';
     ProductListComponent,
     MyOrdersComponent,
     NavbarComponent,
-    DashboardComponent,
     FormsComponent,
     HomeComponent,
     MyCartComponent,
@@ -68,9 +66,12 @@ import { MyCartComponent } from './components/my-cart/my-cart.component';
     AuthModule.forRoot({
       domain: 'dev-u4nrg-wp.us.auth0.com',
       clientId: 'XnuorVqaHw54eLqXctD3ddox70g2ddMD',
-      audience: 'http://localhost:7163',
+      audience: 'https://localhost:7231/Ecommerce',
       httpInterceptor: {
-        allowedList: ['https://localhost:7163/Ecommerce']
+        allowedList: [
+          baseURL + '/user',
+          baseURL + '/my-cart/addItem'
+        ]
       }
     }),
   ],
