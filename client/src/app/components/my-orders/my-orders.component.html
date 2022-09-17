@@ -2,7 +2,7 @@
   <mat-card>
     <form>
       <mat-form-field class="example-full-width">
-        <input #userOrderID matInput type="text" name="userOrderID" value="" placeholder="Enter a userID">
+        <input #userOrderID matInput type="text" name="userOrderID" value="" placeholder="Enter a UserID">
     </mat-form-field>
       &nbsp; &nbsp;
       <button mat-raised-button type="button" (click)="displayPreviousOrders(userOrderID.value)">Submit
@@ -24,7 +24,35 @@
 
 </ul>
 </div>
+ 
+   
 
 
-       
-       
+
+<div class="userid">
+  <mat-card>
+    <form>
+      <mat-form-field class="example-full-width">
+        <input #userOrderID matInput type="text" name="OrderID" value="" placeholder="Enter an Order ID">
+    </mat-form-field>
+      &nbsp; &nbsp;
+      <button mat-raised-button type="button" (click)="displayOrderedProducts(orderID .value)">Submit
+      </button>
+    </form>
+  </mat-card>
+</div>
+
+
+
+<div class="userid2">  
+  <ul>
+      <li class="preorder">
+  
+        {{getallproductOrders()}}
+          
+      </li>
+  
+  </ul>
+  </div>
+
+
