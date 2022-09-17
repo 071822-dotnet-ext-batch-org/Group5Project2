@@ -312,21 +312,7 @@ namespace RepoLayer
             }
 
         }
-        public async Task<User?> UpdateAccountDetailsAsync(User user, Guid userId) 
-        {
-            using (SqlCommand command = new SqlCommand("UPDATE Users SET UserID = @userID, UserName = @userName, userPassword = @UserPasswod", conn))
-            {
-                command.Parameters.AddWithValue("@userID", userId);
 
-                conn.Open();
-                int ret = await command.ExecuteNonQueryAsync();
-                conn.Close();
-                if (ret < 1) return null;
-
-                return user;
-
-            }
-        }
             public async Task<bool> UpdateProductImage(byte[] photo, Guid ProductID)
         {
             using SqlCommand command = new SqlCommand("UPDATE [dbo].[Products] SET ProductImage = @ProductImage WHERE ProductID = @productId", conn);

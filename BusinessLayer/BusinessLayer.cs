@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using System.Security.Claims;
+using Models;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -13,82 +14,27 @@ public class Bus : IBus
         _repo = repo;
     }
 
-    public async Task<User?> LoginAsync(string? userID)
+    public async Task<UserInfoDto?> GetUserInfoAsync(string? userID, IEnumerable<Claim> claims)
     {
-        User? u = await this._repo.GetUserByUserIDAsync(userID);
-
-        return u;
-    }
-
-    public async Task<UserInfoDto?> GetUserInfoAsync(string? userID)
-    {
-        User? u = await this._repo.GetUserByUserIDAsync(userID);
-
-        if (u == null)
-        {
-            return null;
-        }
-
-        UserProfile? p = await this._repo.GetProfileByUserIDAsync(u.UserID);
+        UserProfile? p = await this._repo.GetProfileByUserIDAsync(userID);
+        string? name = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/name"))?.Value;
+        string? email = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/email"))?.Value;
+        string? picture = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/picture"))?.Value;
 
         if (p == null)
         {
-            return null;
+            p = await this._repo.InsertProfileAsync(name, email, picture, userID);
         }
 
-        Cart? c = await this._repo.GetCartByUserIDAsync(u.UserID);
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
         if (c == null)
         {
-            return null;
+            c = await this._repo.InsertCartAsync(userID);
         }
 
-        UserInfoDto uidto = new UserInfoDto(p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c.CartID, p?.ProfilePicture);
+        UserInfoDto uidto = new UserInfoDto(p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c, p?.ProfilePicture);
         
-        return uidto;
-    }
-
-    public async Task<UserInfoDto?> RegisterNewUserAsync(string? userID, string? name, string? email, string? picture)
-    {
-        User? u = await this._repo.GetUserByUserIDAsync(userID);
-        UserInfoDto uidto = new UserInfoDto();
-
-        if (u != null)
-        {
-            uidto.ErrorMessage = "Username already exists";
-            return uidto;
-        }
-
-        User? nu = await this._repo.InsertUserAsync(userID);
-
-        if (nu == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the user";
-            return uidto;
-        }
-
-        UserProfile? np = await this._repo.InsertProfileAsync(name, email, picture, userID);
-        
-        if (np == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the profile";
-            return uidto;
-        }
-
-        Cart? c = await this._repo.InsertCartAsync(userID);
-
-        if (c == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the cart";
-            return uidto;
-        }
-        
-        uidto.ProfileName = np.ProfileName;
-        uidto.ProfilePhone = np.ProfilePhone;
-        uidto.ProfileEmail = np.ProfileEmail;
-        uidto.ProfilePicture = np.ProfilePicture;
-        uidto.CartID = c.CartID;
-
         return uidto;
     }
 
@@ -190,25 +136,25 @@ public class Bus : IBus
         return new MyCartDto(productList, c);
     }
 
-    public async Task<MyCartDto?> AddProductToCartAsync(string? userID, Guid? productID)
+    public async Task<bool> AddProductToCartAsync(string? userID, Guid? productID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
         if (c == null)
         {
-            return null;
+            return false;
         }
 
         Product? p = await this._repo.GetProductByProductIDAsync(productID);
 
         if (p == null)
         {
-            return null;
+            return false;
         }
 
         bool addedToCartSuccess = await this._repo.AddProductToCartAsync(c.CartID, productID);
 
-        return await GetMyCartAsync(userID);
+        return addedToCartSuccess;
     }
 
      public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr)
@@ -217,13 +163,6 @@ public class Bus : IBus
         Order? e = await this._repo.CreateNewOrderAsync(rr,id);
        
         return e;
-}
-     public async Task<User?> UpdateAccountDetailsAsync(User user )
-    {
-        Guid id = Guid.NewGuid();
-        User? aa = await this._repo.UpdateAccountDetailsAsync(user, id);
-        return aa;
-
     }
     public async Task<bool> UpdateProductImage(Stream file, Guid productId)
     {
