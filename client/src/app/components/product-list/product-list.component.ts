@@ -40,15 +40,18 @@ export class ProductListComponent implements OnInit {
     this.ATC.addToCart(productID).subscribe(data => {
       if(data){
         console.log('added to cart')
+        
+        this.UIS.getUserInfo().subscribe(data=>{
+          console.log(data.cart.cartItems);
+          this.DSS.updateCart(data.cart.cartItems);
+        });
+
       } else {
         console.log('something went wrong')
       }
     });
 
-    this.UIS.getUserInfo().subscribe(data=>{
-      console.log(data.cart.cartItems);
-      this.DSS.updateCart(data.cart.cartItems);
-    })
+
   }
 
 }
