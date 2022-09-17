@@ -6,7 +6,7 @@ import { ProductListComponent } from './../../components/product-list/product-li
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Orders } from 'src/app/Models/Orders';
+import { Orders } from 'src/app/Models/OrderID';
 
 
 @Component({
@@ -16,37 +16,57 @@ import { Orders } from 'src/app/Models/Orders';
 })
 export class MyOrdersComponent implements OnInit {
   
-  Orders!: any;
+  getPriorOrders!: string;
+  userID!: any;
   orderID!: any;
-  orderproduct!: any;
+  orderproduct!: any
   
   constructor(private EcommerceAPI: ProductListService) { }
 
   ngOnInit(): void {
     
-    this.displayOrders();
   }
-  
-  //Display all orders
-  displayOrders() : void {
+
+  displayPreviousOrders(userOrderID: string) {
     
-    this.EcommerceAPI.getOrders().subscribe((data: any) => {
-      this.Orders= data;
+    this.EcommerceAPI.getPriorOrdersByUserID(userOrderID).subscribe(data => {
+      this.getPriorOrders = data;
        
+    
     })
 
   }
     
-   //Display all ordered products by ID
-  displayOrderedProducts(orderID : any) : void {
+  
+  getPreviousOrders2(){
 
-    this.EcommerceAPI.getOrdersById(orderID).subscribe((data: any) => {
+    this.getPriorOrders;
+    console.log(this?.getPriorOrders);
+    var getOrders = JSON.stringify(this.getPriorOrders);
+    return getOrders;
+    
+  }
+  
+   
+
+  displayOrderedProducts(orderID : string){
+
+    this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
       this.orderproduct = data;
-        console.log(this.orderproduct);
+
   })
  }
   
+ getallproductOrders(){
+
+  this.orderproduct;
+  console.log(this?.orderproduct);
+  var getOrderedproduct = JSON.stringify(this.orderproduct);
+  return getOrderedproduct;
+  
+}
 
 
+  
 
 }
