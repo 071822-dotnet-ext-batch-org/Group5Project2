@@ -21,29 +21,13 @@ namespace APILayer.Controllers
             _bus = bus;
         }
 
-        [HttpPost("login")]
-        [Authorize]
-        public async Task<ActionResult<string?>> LoginAsync()
-        {
-            string? auth0id = User.Identity?.Name;
-
-            User? u = await this._bus.LoginAsync(auth0id);
-
-            if(u == null)
-            {
-                return NotFound("User does not exist.");
-            }
-
-            return Ok(u);
-        }
-
         [HttpGet("user")]
         [Authorize]
-        public async Task<ActionResult<string?>> GetUserInfoAsync()
+        public async Task<ActionResult<UserInfoDto>> GetUserInfoAsync()
         {
             string? auth0id = User.Identity?.Name;
-
-            UserInfoDto? u = await this._bus.GetUserInfoAsync(auth0id);
+          
+            UserInfoDto? u = await this._bus.GetUserInfoAsync(auth0id, User.Claims);
 
             if(u == null)
             {
@@ -51,25 +35,6 @@ namespace APILayer.Controllers
             }
 
             return Ok(u);
-        }
-
-        [HttpPost("register")]
-        [Authorize]
-        public async Task<ActionResult<UserInfoDto?>> RegisterAsync()
-        {
-            string? auth0id = User.Identity?.Name;
-            string? name = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/name"))?.Value;
-            string? email = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/email"))?.Value;
-            string? picture = User.Claims.FirstOrDefault(c => c.Type.Equals("myinfo/picture"))?.Value;
-
-            UserInfoDto? u = await this._bus.RegisterNewUserAsync(auth0id, name, email, picture);
-
-            if (u?.ErrorMessage != String.Empty)
-            {
-                return Unauthorized(u?.ErrorMessage);
-            }
-
-            return Created($"/my-profile", u);
         }
 
         [HttpGet("products")]
@@ -160,22 +125,26 @@ namespace APILayer.Controllers
             return Ok(c);
         }
 
-        [HttpPost("my-cart/addItem/{productID}")]
+        [HttpPost("my-cart/addItem")]
         [Authorize]
-        public async Task<ActionResult<MyCartDto?>> AddProductToCartAsync(Guid? productID)
+        public async Task<ActionResult<bool>> AddProductToCartAsync(Guid? productID)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
+            Console.WriteLine(productID);
+
             string? auth0id = User.Identity?.Name;
 
-            MyCartDto? c = await this._bus.AddProductToCartAsync(auth0id, productID);
+            Console.WriteLine(auth0id);
 
-            if (c==null)
+            bool c = await this._bus.AddProductToCartAsync(auth0id, productID);
+
+            if (c==false)
             {
-                return Unauthorized("Unable to add item to cart");
+                return BadRequest(c);
             }
 
             return Ok(c);

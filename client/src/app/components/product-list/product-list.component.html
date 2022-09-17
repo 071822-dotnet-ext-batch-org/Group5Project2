@@ -11,13 +11,11 @@
           <img class = "img" mat-card-image src= "https://localhost:7231/Ecommerce/product/{{product.productID}}/image">
           <mat-card-content>
             <p>
-             <span class="cost">Cost:</span> {{product.productPrice}} : Stock: {{product.stock}} : Product ID {{product.productID}}
+              {{product.productPrice | currency}}
             </p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-            <button mat-button>SHOP</button>
+            <button *ngIf="(auth.isAuthenticated$ | async) === true" mat-button (click)="addToCart(product.productID)">Add To Cart</button>
           </mat-card-actions>
         </mat-card>    
         </div>

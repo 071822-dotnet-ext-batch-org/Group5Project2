@@ -11,21 +11,21 @@ namespace Models
         {
         }
 
-        public UserInfoDto(string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Guid? cartID, string? profilePicture)
+        public UserInfoDto(string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Cart? cart, string? profilePicture)
         {
             ProfileName = profileName;
             ProfileAddress = profileAddress;
             ProfilePhone = profilePhone;
             ProfileEmail = profileEmail;
             ProfilePicture = profilePicture;
-            CartID = cartID;
+            Cart = cart;
         }
         public string? ProfileName {get; set;}
         public string? ProfileAddress {get; set;}
         public string? ProfilePhone {get; set;}
         public string? ProfileEmail {get; set;}
         public string? ProfilePicture {get; set;} 
-        public Guid? CartID {get; set;} 
+        public Cart? Cart {get; set;} 
         public string? ErrorMessage {get; set;} = string.Empty;
     }
 }

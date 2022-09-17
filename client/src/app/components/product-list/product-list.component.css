@@ -1,6 +1,5 @@
 .example-card {
-    max-width: 250px;
-    
+    width: 250px;
   }
   
   .example-header-image {
@@ -18,8 +17,10 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
-    width: 250px;
+    width: 237px;
+    height: 235px;
     margin-left: 0.5px;
+    object-fit: contain;
     
   }
   .displayhori{
