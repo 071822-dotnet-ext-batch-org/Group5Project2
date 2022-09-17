@@ -1,0 +1,61 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-header>
+            <img mat-card-avatar src={{this.userInfo.profilePicture}}>
+            <mat-card-title>{{this.userInfo.profileName}}</mat-card-title>
+            <mat-card-subtitle>{{this.userInfo.profileEmail}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="content">
+            
+            <div class="address-container">
+                <p>Address</p>
+
+                <div *ngIf="showAddress">
+                    <p class="editable">
+                        <span class="not-on-file" *ngIf="this.userInfo.profileAddress===''">
+                            No address given 
+                        </span>
+                        
+                        {{this.userInfo.profileAddress}}
+                        
+                        <button mat-button (click)="editAddress()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </p>
+                </div>
+
+                <div *ngIf="!showAddress">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Address</mat-label>
+                        <input matInput id="address" type="text" (focusout)="updateAddressInfo()" (keydown.enter)="updateAddressInfo()" [formControl]="address">
+                    </mat-form-field>
+                </div>
+            </div>
+                
+            <div class="phone-container">
+                <p>Phone</p>
+
+                <div *ngIf="showPhone">
+                    <p class="editable">
+                        <span class="not-on-file" *ngIf="this.userInfo.profilePhone===''">
+                            No phone number given 
+                        </span>
+                        
+                        {{this.userInfo.profilePhone}}
+                        
+                        <button mat-button (click)="editPhone()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </p>
+                </div>
+
+                <div *ngIf="!showPhone">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Phone</mat-label>
+                        <input matInput id="phone" type="text" (focusout)="updatePhoneInfo()" (keydown.enter)="updatePhoneInfo()" [formControl]="phone">
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
