@@ -446,4 +446,36 @@ public class Repo : IRepo
     {
         throw new NotImplementedException();
     }
+
+    public async Task<bool> UpdateUserAddressAsync(string? userID, string address)
+    {
+        string sql = $"UPDATE Profiles SET profileAddress = @address WHERE fk_userID = @userID";
+        using (SqlCommand command = new SqlCommand(sql, _conn))
+        {
+            command.Parameters.AddWithValue("@address", address);
+            command.Parameters.AddWithValue("@userID", userID);
+
+            _conn.Open();
+            bool ret = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+
+            return ret;
+        }
+    }
+
+    public async Task<bool> UpdateUserPhoneAsync(string? userID, string phone)
+    {
+        string sql = $"UPDATE Profiles SET profilePhone = @phone WHERE fk_userID = @userID";
+        using (SqlCommand command = new SqlCommand(sql, _conn))
+        {
+            command.Parameters.AddWithValue("@phone", phone);
+            command.Parameters.AddWithValue("@userID", userID);
+
+            _conn.Open();
+            bool ret = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+
+            return ret;
+        }
+    }
 }

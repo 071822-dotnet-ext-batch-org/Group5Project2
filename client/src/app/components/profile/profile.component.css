@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    place-content: center center;
+    flex-flow: row wrap;
+}
+
+.not-on-file {
+    font-style: italic;
+    font-size: small;
+}
+
+.editable {
+    display: flex;
+    justify-content: space-between;
+}

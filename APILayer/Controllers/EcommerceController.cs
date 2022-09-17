@@ -37,6 +37,22 @@ namespace APILayer.Controllers
             return Ok(u);
         }
 
+        [HttpPut("user")]
+        [Authorize]
+        public async Task<ActionResult<UserProfile?>> UpdateUserInfoAsync(UpdateUserInfoDto request)
+        {
+            string? auth0id = User.Identity?.Name;
+
+            UserProfile? u = await this._bus.UpdateUserInfoAsync(auth0id, request);
+
+            if(u==null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(u);
+        }
+
         [HttpGet("products")]
         public async Task<ActionResult<List<Product?>>> GetAllProductsAsync()
         {
@@ -134,11 +150,7 @@ namespace APILayer.Controllers
                 return BadRequest();
             }
 
-            Console.WriteLine(productID);
-
             string? auth0id = User.Identity?.Name;
-
-            Console.WriteLine(auth0id);
 
             bool c = await this._bus.AddProductToCartAsync(auth0id, productID);
 
