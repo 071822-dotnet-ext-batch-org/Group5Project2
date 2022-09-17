@@ -27,4 +27,12 @@
     position: relative;
     right: 35px;
     padding: 5px;
+
+}
+
+
+.orderIsclick{
+
+    cursor: pointer;
+
 }
