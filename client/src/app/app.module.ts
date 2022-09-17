@@ -75,10 +75,6 @@ import { ProfileComponent } from './components/profile/profile.component';
         allowedList: [
           baseURL + '/user',
           baseURL + '/my-cart/addItem',
-
-          baseURL + '/my-orders',
-          baseURL + '/my-orders/*',
-
         ]
       }
     }),

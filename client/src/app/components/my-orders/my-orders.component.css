@@ -1,4 +1,12 @@
-.displayorder{
+.userid{
+
+    margin: auto;
+    width: 33%;
+    box-shadow: 5px 5px 5px 5px  #888888;
+    margin-top: 100px;
+}
+
+.userid2{
 
     margin: auto;
     width: 80%;
@@ -13,17 +21,10 @@
     width: 300px !important;
 }
 
-
 .preorder{
 
     display: block;
     position: relative;
     right: 35px;
     padding: 5px;
-}
-
-
-.orderclick{
-
-    cursor: pointer;
 }
