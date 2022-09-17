@@ -40,5 +40,18 @@
 
 .cost{
 
-  color: blue;
+  color: #0000EE;
+}
+
+.mat-icon-button{
+
+  color: #0000EE;
+}
+
+.shopcartonimage{
+
+  color: #0000EE;
+  position: relative;
+  top: 5.5px;
+
 }

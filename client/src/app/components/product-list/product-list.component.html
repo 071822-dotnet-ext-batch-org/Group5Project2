@@ -15,9 +15,12 @@
             </p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-            <button mat-button>SHOP</button>
+            <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+              <mat-icon>favorite</mat-icon></button>
+            <button mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+              <mat-icon>share</mat-icon></button>  
+            <button  mat-icon-button class="shopcartonimage" color="warn" aria-label="Example icon button with a heart icon">
+              <a href="https://localhost:7231/Ecommerce/my-cart/addItem/{{product.productID}}"><mat-icon>add_shopping_cart</mat-icon> </a></button> 
           </mat-card-actions>
         </mat-card>    
         </div>
