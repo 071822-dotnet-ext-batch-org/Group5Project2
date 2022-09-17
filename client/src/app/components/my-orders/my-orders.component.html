@@ -1,7 +1,23 @@
+<div class="userid">
+  <mat-card>
+    <form>
+      <mat-form-field class="example-full-width">
+        <input #userOrderID matInput type="text" name="userOrderID" value="" placeholder="Enter a User ID">
+    </mat-form-field>
+      &nbsp; &nbsp;
+      <button mat-raised-button type="button" (click)="displayPreviousOrders(userOrderID.value)">Submit
+      </button>
+    </form>
+  </mat-card>
+</div>
 
-<div class="displayorder">  
+
+
+ 
+<div class="userid2">  
 <ul>
     <li class="preorder">
+
 
       <table style="width:100%">
         <tr>
@@ -11,8 +27,10 @@
           <th>Cancelled Order</th>
           <th>Refunded Order</th>
         </tr>
-        <tr *ngFor="let order of Orders" (click)="displayOrderedProducts(order.orderID)" class="orderInclick" >
-       
+
+
+        <tr *ngFor="let order of Orders" (click)="displayOrderedProducts(order.orderID)" class="orderIsclick" >
+
           <td>{{order.orderTotal}}</td>
           <td>{{order.dateOrdered}}</td>
           <td>{{order.dateDelivered}}</td>
@@ -23,20 +41,41 @@
 
      
        
+
+
     </li>
 
 </ul>
 </div>
  
+   
 
 
 
+<div class="userid">
+  <mat-card>
+    <form>
+      <mat-form-field class="example-full-width">
+        <input #userOrderID matInput type="text" name="OrderID" value="" placeholder="Enter an Order ID">
+    </mat-form-field>
+      &nbsp; &nbsp;
+      <button mat-raised-button type="button" (click)="displayOrderedProducts(orderID .value)">Submit
+      </button>
+    </form>
+  </mat-card>
+</div>
 
 
 
-
-
-
-
+<div class="userid2">  
+  <ul>
+      <li class="preorder">
+  
+        {{getallproductOrders()}}
+          
+      </li>
+  
+  </ul>
+  </div>
 
 
