@@ -23,6 +23,7 @@ export class MyOrdersComponent implements OnInit {
   ngOnInit(): void {
     
     this.displayOrders();
+    
   }
   
   //Display all orders
@@ -40,10 +41,19 @@ export class MyOrdersComponent implements OnInit {
 
     this.EcommerceAPI.getOrdersById(orderID).subscribe((data: any) => {
       this.orderproduct = data;
-        console.log(this.orderproduct);
+      console.log(this.orderproduct);
   })
  }
   
+  getallproductOrders(){
+  this.orderproduct;
+  console.log(this.orderproduct);
+  var getOrderedproduct = JSON.stringify(this.orderproduct);
+  return getOrderedproduct;
+  
+ }
+ 
+
 
 
 
