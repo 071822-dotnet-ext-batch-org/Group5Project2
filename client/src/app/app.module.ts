@@ -75,7 +75,9 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
           baseURL + '/user',
           baseURL + '/my-cart/addItem',
           baseURL + '/my-cart',
-          baseURL + '/create-order'
+          baseURL + '/create-order',
+          baseURL + '/my-orders',
+          baseURL + '/my-orders/*'
         ]
       }
     }),
