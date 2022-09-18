@@ -25,6 +25,8 @@ namespace APILayer.Controllers
         [Authorize]
         public async Task<ActionResult<UserInfoDto>> GetUserInfoAsync()
         {
+            // Console.WriteLine(HttpContext.Request.Headers["Authorization"]);
+
             string? auth0id = User.Identity?.Name;
           
             UserInfoDto? u = await this._bus.GetUserInfoAsync(auth0id, User.Claims);
@@ -89,10 +91,10 @@ namespace APILayer.Controllers
 
             if(o == null)
             {
-                return Unauthorized("Unable to create order");
+                return BadRequest(new {message = "Order failed to process"});
             }
 
-            return Created($"my-orders/{o.OrderID}", o);
+            return Ok(new {message = "Order completed! Thank for shopping with us."});
         }
 
         [HttpGet("my-orders")]

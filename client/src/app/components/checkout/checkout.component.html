@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="card-container">
+        <mat-card class="product-cards" *ngFor="let product of products">
+            <mat-card-title-group>
+                <mat-card-title>
+                    {{product.productName}}
+                </mat-card-title>
+                <mat-card-subtitle>
+                    {{product.productPrice | currency}}
+                </mat-card-subtitle>
+                <img mat-card-sm-image src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image" class="product-image">
+            </mat-card-title-group>
+            <mat-card-content>
+                {{product.productDetails}}
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-footer class="card-footer">
+                Count: {{product.count}} Total Price: {{product.count * product.productPrice | currency}}
+            </mat-card-footer>
+        </mat-card>
+    </div>
+    <div class="checkout-container">
+        <mat-card class="checkout-card">
+            <mat-card-title>
+                Total: {{checkoutTotal | currency}}
+                <button mat-raised-button color="primary" id="checkout-button" (click)="checkout()">Checkout</button>
+            </mat-card-title>
+        </mat-card>
+        <p>{{orderMessage}}</p>
+    </div>
+</div>

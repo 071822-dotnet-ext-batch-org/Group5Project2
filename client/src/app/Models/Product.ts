@@ -7,5 +7,6 @@ export interface Product{
     stock: number;
     dateCreated: Date;
     dateModified: Date;
+    count: number;
 }
 
