@@ -28,11 +28,11 @@ import { AppComponent } from './app.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { FormsComponent } from './components/forms/forms.component';
 import { MyCartComponent } from './components/my-cart/my-cart.component';
 import { baseURL } from './Services/base-url';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 
 @NgModule({
   declarations: [
@@ -40,10 +40,10 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     ProductListComponent,
     MyOrdersComponent,
     NavbarComponent,
-    FormsComponent,
     MyCartComponent,
     ProfileComponent,
     CheckoutComponent,
+    ProductCardComponent,
   ],
   imports: [
     BrowserModule,

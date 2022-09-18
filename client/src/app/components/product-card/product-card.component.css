@@ -1,0 +1,8 @@
+.product-cards {
+    max-width: 300px;
+    margin: 10px auto;
+}
+
+.card-footer {
+    text-align: center;
+}

@@ -16,13 +16,14 @@ export class CheckoutComponent implements OnInit {
   orderMessage: any;
 
   constructor(
-    private GMC: GetMyCartService,
     private CHK: CheckoutService,
     private DSS: DataSharingService
-  ) { }
+  ) { 
+    this.DSS.getUpdatedCheckoutTotal().subscribe(newTotal => this.checkoutTotal = newTotal);
+  }
 
   ngOnInit(): void {
-    this.displayCart();
+    
   }
 
   checkout(): void {
@@ -32,21 +33,4 @@ export class CheckoutComponent implements OnInit {
     this.DSS.updateCart(0);
   }
 
-  displayCart(): void {
-    this.GMC.getMyCart().subscribe(data=>{
-
-      data.products.forEach(product=>{
-        const result = this.products.find(p=>p.productID === product.productID)
-        if(result != undefined){
-          result.count++
-        } else {
-          product.count = 1;
-          this.products.push(product);
-        }
-
-        this.checkoutTotal += product.productPrice
-      });
-    
-    })
-  }
 }
