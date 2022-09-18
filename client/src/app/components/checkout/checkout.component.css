@@ -8,11 +8,6 @@
     
 }
 
-.product-cards {
-    max-width: 300px;
-    margin: 10px auto;
-}
-
 .checkout-container {
     width: 50%;
     float: right;
@@ -25,10 +20,6 @@
 
 .product-img {
     object-fit: cover;
-}
-
-.card-footer {
-    text-align: center;
 }
 
 #checkout-button {

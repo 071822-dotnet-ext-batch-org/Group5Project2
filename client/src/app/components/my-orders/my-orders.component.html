@@ -13,9 +13,9 @@
         </tr>
         <tr *ngFor="let order of Orders" (click)="displayOrderedProducts(order.orderID)" class="orderclick" >
        
-          <td>{{order.orderTotal}}</td>
-          <td>{{order.dateOrdered}}</td>
-          <td>{{order.dateDelivered}}</td>
+          <td>{{order.orderTotal | currency}}</td>
+          <td>{{order.dateOrdered | date:'long'}}</td>
+          <td>{{order.dateDelivered | date:'long'}}</td>
           <td>{{order.cancelled}}</td>
           <td>{{order.refunded}}</td>
         </tr>
@@ -28,10 +28,23 @@
 </div>
  
 
-
 <div class="displayorder">  
-  {{getallproductOrders()}}
-  </div>
+  <mat-card class="product-cards" *ngFor="let product of products">
+    <mat-card-title-group>
+        <mat-card-title>
+            {{product.productName}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{product.productPrice | currency}}
+        </mat-card-subtitle>
+        <img mat-card-sm-image src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image" class="product-image">
+    </mat-card-title-group>
+    <mat-card-content>
+        {{product.productDetails}}
+    </mat-card-content>
+    <mat-divider></mat-divider>
+  </mat-card>
+</div>
 
 
 

@@ -4,7 +4,8 @@ import { ProductListComponent } from './../../components/product-list/product-li
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Orders } from 'src/app/Models/Orders';
+import { Product } from 'src/app/Models/Product';
+import { OrderedProducts } from 'src/app/Models/OrderedProducts';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class MyOrdersComponent implements OnInit {
   
   Orders!: any;
   orderID!: any;
-  orderproduct!: any;
+  orderproduct!: OrderedProducts;
+  products: Product[] = [];
   
   constructor(private EcommerceAPI: ProductListService) { }
 
@@ -39,22 +41,11 @@ export class MyOrdersComponent implements OnInit {
    //Display all ordered products by ID
   displayOrderedProducts(orderID : any) : void {
 
-    this.EcommerceAPI.getOrdersById(orderID).subscribe((data: any) => {
+    this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
       this.orderproduct = data;
+      this.products = data.products
       console.log(this.orderproduct);
   })
  }
   
-  getallproductOrders(){
-  this.orderproduct;
-  console.log(this.orderproduct);
-  var getOrderedproduct = JSON.stringify(this.orderproduct);
-  return getOrderedproduct;
-  
- }
- 
-
-
-
-
 }

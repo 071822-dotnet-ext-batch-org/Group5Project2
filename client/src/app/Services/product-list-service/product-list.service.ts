@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../../Models/Product';
 import { baseURL } from '../base-url';
+import { OrderedProducts } from 'src/app/Models/OrderedProducts';
 
 
 @Injectable({
@@ -33,9 +34,9 @@ export class ProductListService {
 
 
   //Display product orders by ID
-  public getOrdersById(orderID : any): Observable<any> {
+  public getOrdersById(orderID : string): Observable<OrderedProducts> {
     
-    return this.http.get<any>(`${baseURL}/my-orders/` + orderID)
+    return this.http.get<OrderedProducts>(`${baseURL}/my-orders/` + orderID)
     
   }
 
