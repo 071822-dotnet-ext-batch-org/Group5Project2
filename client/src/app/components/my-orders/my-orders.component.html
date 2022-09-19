@@ -1,30 +1,58 @@
-<div class="userid">
-  <mat-card>
-    <form>
-      <mat-form-field class="example-full-width">
-        <input #userOrderID matInput type="text" name="userOrderID" value="" placeholder="Enter a userID">
-    </mat-form-field>
-      &nbsp; &nbsp;
-      <button mat-raised-button type="button" (click)="displayPreviousOrders(userOrderID.value)">Submit
-      </button>
-    </form>
-  </mat-card>
-</div>
 
-
-
- 
-<div class="userid2">  
+<div class="displayorder">  
 <ul>
     <li class="preorder">
 
-      {{getPreviousOrders2()}}
+      <table style="width:100%">
+        <tr>
+          <th>Order Total</th>
+          <th>Date Ordered</th>
+          <th>Date delivered</th>
+          <th>Cancelled Order</th>
+          <th>Refunded Order</th>
+        </tr>
+        <tr *ngFor="let order of Orders" (click)="displayOrderedProducts(order.orderID)" class="orderclick" >
+       
+          <td>{{order.orderTotal | currency}}</td>
+          <td>{{order.dateOrdered | date:'long'}}</td>
+          <td>{{order.dateDelivered | date:'long'}}</td>
+          <td>{{order.cancelled}}</td>
+          <td>{{order.refunded}}</td>
+        </tr>
+      </table>
+
         
     </li>
 
 </ul>
 </div>
+ 
+
+<div class="displayorder" *ngIf="products.length > 0">  
+  <mat-card class="product-cards" *ngFor="let product of products">
+    <mat-card-title-group>
+        <mat-card-title>
+            {{product.productName}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{product.productPrice | currency}}
+        </mat-card-subtitle>
+        <img mat-card-sm-image src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image" class="product-image">
+    </mat-card-title-group>
+    <mat-card-content>
+        <p>
+          {{product.productDetails}}
+        </p>
+        <p>
+          Count: {{product.count}}
+        </p>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+  </mat-card>
+</div>
 
 
-       
-       
+
+
+
+

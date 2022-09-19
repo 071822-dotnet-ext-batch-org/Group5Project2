@@ -109,7 +109,7 @@ public class FrontStoreController : ControllerBase
         if (image != null)
         {
             await using var memoryStream = new MemoryStream();
-            await image!.CopyToAsync(memoryStream);
+            // await image!.CopyToAsync(memoryStream);
             UserImagebyte = memoryStream.ToArray();
 
         }
@@ -133,7 +133,7 @@ public class FrontStoreController : ControllerBase
 
 
     }//EoM
-    // create new order
+    // create new order by mohammad
       [HttpPost("CreateNewOrderAsync/create")]
     public async Task<ActionResult> CreateNewOrderAsync(UpdateNewOrderDto order)
     {
@@ -149,19 +149,6 @@ public class FrontStoreController : ControllerBase
             return BadRequest();
 
     }
-    //update the account details
-     [HttpPost("UpdateAccountDetailsAsync/update")]
-    public async Task<ActionResult> UpdateAccountDetailsAsync(User user)
-    {
-        // User? usr = await this._PostOrder.CreateNewOrderAsync(user);
-
-        // if (usr == null) return NotFound(" Not able to create new order");
-        // return Created("Order/{newOrder.OrderId}", usr);
-        return BadRequest();
-    }
-
-
-
 
     //This API will insert buyers products into cart
     [HttpPost("AddProductToCartAsync")]
@@ -186,7 +173,7 @@ public class FrontStoreController : ControllerBase
 
         return BadRequest();
     }
-    // upload the product image
+    // upload the product image by Mohammad
     [HttpPut("upload/UpdateProductImageAsync")]
     public async Task<ActionResult> UpdateProductImageAsync(IFormFile imageFile, Guid productId)
     {
@@ -224,8 +211,8 @@ public class FrontStoreController : ControllerBase
 
 
 
-
-
-
-
 }
+
+
+
+

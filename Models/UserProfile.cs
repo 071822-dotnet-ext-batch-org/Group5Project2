@@ -14,7 +14,7 @@ namespace Models
         {
         }
 
-        public UserProfile(Guid? profileID, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Stream? profilePicture, Guid? fk_UserID, DateTime? dateCreated, DateTime? dateModified)
+        public UserProfile(Guid? profileID, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, string? profilePicture, string? fk_UserID, DateTime? dateCreated, DateTime? dateModified)
         {
             ProfileID = profileID;
             ProfileName = profileName;
@@ -32,9 +32,8 @@ namespace Models
         public string? ProfileAddress { get; set; }
         public string? ProfilePhone { get; set; }
         public string? ProfileEmail { get; set; }
-        public Stream? ProfilePicture { get; set; }
-        public Guid? Fk_UserID { get; set; }
-
+        public string? ProfilePicture { get; set; }
+        public string? Fk_UserID { get; set; }
         public DateTime? dateCreated {get; set;}
         public DateTime? dateModified {get; set;}
     }

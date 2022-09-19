@@ -21,34 +21,15 @@ namespace APILayer.Controllers
             _bus = bus;
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<string?>> LoginAsync(LoginDto request)
+        [HttpGet("user")]
+        [Authorize]
+        public async Task<ActionResult<UserInfoDto>> GetUserInfoAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            // Console.WriteLine(HttpContext.Request.Headers["Authorization"]);
 
-            User? u = await this._bus.LoginAsync(request);
-
-            if(u == null)
-            {
-                return Unauthorized("Wrong username or password");
-            }
-
-        
-            return Ok(u);
-        }
-
-        [HttpGet("user/{username}")]
-        public async Task<ActionResult<string?>> GetUserInfoAsync(string username)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            UserInfoDto? u = await this._bus.GetUserInfoAsync(username);
+            string? auth0id = User.Identity?.Name;
+          
+            UserInfoDto? u = await this._bus.GetUserInfoAsync(auth0id, User.Claims);
 
             if(u == null)
             {
@@ -58,50 +39,25 @@ namespace APILayer.Controllers
             return Ok(u);
         }
 
-        [HttpGet("user/{username}/photo")]
-        public async Task<ActionResult<Stream?>> GetUserPhotoAsync(string username)
+        [HttpPut("user")]
+        [Authorize]
+        public async Task<ActionResult<UserProfile?>> UpdateUserInfoAsync(UpdateUserInfoDto request)
         {
-            if(!ModelState.IsValid)
+            string? auth0id = User.Identity?.Name;
+
+            UserProfile? u = await this._bus.UpdateUserInfoAsync(auth0id, request);
+
+            if(u==null)
             {
                 return BadRequest();
             }
 
-            Stream? p = await this._bus.GetUserPhotoAsync(username);
-
-            if(p == null)
-            {
-                return NotFound("Photo not found");
-            }
-
-            return File(p, "image/png");
-        }
-
-        [HttpPost("register")]
-        public async Task<ActionResult<UserInfoDto?>> RegisterAsync([FromForm]RegisterDto request)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            UserInfoDto? u = await this._bus.RegisterNewUserAsync(request);
-
-            if (u?.ErrorMessage != String.Empty)
-            {
-                return Unauthorized(u?.ErrorMessage);
-            }
-
-            return Created($"/user/{request.Username}", u);
+            return Ok(u);
         }
 
         [HttpGet("products")]
         public async Task<ActionResult<List<Product?>>> GetAllProductsAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             List<Product?> p = await this._bus.GetAllProductsAsync();
 
             return Ok(p);
@@ -126,37 +82,34 @@ namespace APILayer.Controllers
         }
 
         [HttpPost("create-order")]
-        public async Task<ActionResult<Order?>> CreateOrderAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<Order?>> CreateOrderAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            Order? o = await this._bus.CreateOrderAsync(userID);
+            Order? o = await this._bus.CreateOrderAsync(auth0id);
 
             if(o == null)
             {
-                return Unauthorized("Unable to create order");
+                return BadRequest(new {message = "Order failed to process"});
             }
 
-            return Created($"my-orders/{o.OrderID}", o);
+            return Ok(new {message = "Order completed! Thank for shopping with us."});
         }
 
         [HttpGet("my-orders")]
-        public async Task<ActionResult<List<Order?>>> GetMyOrdersAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<List<Order?>>> GetMyOrdersAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            List<Order?> o = await this._bus.GetMyOrdersAsync(userID);
+            List<Order?> o = await this._bus.GetMyOrdersAsync(auth0id);
 
             return Ok(o);
         }
 
         [HttpGet("my-orders/{orderID}")]
+        [Authorize]
         public async Task<ActionResult<SingleOrderDto?>> GetOrderAsync(Guid? orderID)
         {
             if(!ModelState.IsValid)
@@ -175,14 +128,12 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("my-cart")]
-        public async Task<ActionResult<MyCartDto?>> GetMyCartAsync(Guid? userID)
+        [Authorize]
+        public async Task<ActionResult<MyCartDto?>> GetMyCartAsync()
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            string? auth0id = User.Identity?.Name;
 
-            MyCartDto? c = await this._bus.GetMyCartAsync(userID);
+            MyCartDto? c = await this._bus.GetMyCartAsync(auth0id);
 
             if (c == null)
             {
@@ -192,19 +143,22 @@ namespace APILayer.Controllers
             return Ok(c);
         }
 
-        [HttpPost("my-cart/addItem/{productID}")]
-        public async Task<ActionResult<MyCartDto?>> AddProductToCartAsync(Guid? userID, Guid? productID)
+        [HttpPost("my-cart/addItem")]
+        [Authorize]
+        public async Task<ActionResult<bool>> AddProductToCartAsync(Guid? productID)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            MyCartDto? c = await this._bus.AddProductToCartAsync(userID, productID);
+            string? auth0id = User.Identity?.Name;
 
-            if (c==null)
+            bool c = await this._bus.AddProductToCartAsync(auth0id, productID);
+
+            if (c==false)
             {
-                return Unauthorized("Unable to add item to cart");
+                return BadRequest(c);
             }
 
             return Ok(c);
@@ -215,5 +169,7 @@ namespace APILayer.Controllers
         // TODO: Fix cartItems = Count how many products in CartsProducts by cartID
         // TODO: Fix orders, add orderItems = ^ in OrdersProducts by orderID
         // use triggers?
+        // TODO: fix cart total in database (reading 0 when items are added)
+        // TODO: fix my orders page to make the cards say count and total
     }
 }

@@ -1,0 +1,18 @@
+<mat-card class="product-cards" *ngFor="let product of products">
+    <mat-card-title-group>
+        <mat-card-title>
+            {{product.productName}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{product.productPrice | currency}}
+        </mat-card-subtitle>
+        <img mat-card-sm-image src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image" class="product-image">
+    </mat-card-title-group>
+    <mat-card-content>
+        {{product.productDetails}}
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-footer class="card-footer">
+        Count: {{product.count}} Total Price: {{product.count * product.productPrice | currency}}
+    </mat-card-footer>
+</mat-card>

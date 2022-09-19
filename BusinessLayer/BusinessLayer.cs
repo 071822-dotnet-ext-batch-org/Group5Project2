@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using System.Security.Claims;
+using Models;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -13,120 +14,27 @@ public class Bus : IBus
         _repo = repo;
     }
 
-    public async Task<User?> LoginAsync(LoginDto request)
+    public async Task<UserInfoDto?> GetUserInfoAsync(string? userID, IEnumerable<Claim> claims)
     {
-        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
-
-        if (u == null || u.Password != request.Password)
-        {
-            return null;
-        }
-
-        return u;
-    }
-
-    public async Task<UserInfoDto?> GetUserInfoAsync(string request)
-    {
-        User? u = await this._repo.GetUserByUsernameAsync(request);
-
-        if (u == null)
-        {
-            return null;
-        }
-
-        UserProfile? p = await this._repo.GetProfileByUserIDAsync(u.UserID);
+        UserProfile? p = await this._repo.GetProfileByUserIDAsync(userID);
+        string? name = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/name"))?.Value;
+        string? email = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/email"))?.Value;
+        string? picture = claims.FirstOrDefault(c=>c.Type.Equals("myinfo/picture"))?.Value;
 
         if (p == null)
         {
-            return null;
+            p = await this._repo.InsertProfileAsync(name, email, picture, userID);
         }
 
-        Cart? c = await this._repo.GetCartByUserIDAsync(u.UserID);
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
         if (c == null)
         {
-            return null;
+            c = await this._repo.InsertCartAsync(userID);
         }
 
-        bool hasProfilePicture = (p?.ProfilePicture?.Length > 0);
-
-        UserInfoDto uidto = new UserInfoDto(u.UserID, u.Username, p?.ProfileID, p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c.CartID, hasProfilePicture);
+        UserInfoDto uidto = new UserInfoDto(p?.ProfileName, p?.ProfileAddress, p?.ProfilePhone, p?.ProfileEmail, c, p?.ProfilePicture);
         
-        return uidto;
-    }
-
-    public async Task<Stream?> GetUserPhotoAsync(string request)
-    {
-        User? u = await this._repo.GetUserByUsernameAsync(request);
-
-        if (u == null)
-        {
-            return null;
-        }
-
-        Stream? photo = await this._repo.GetProfilePictureByUserIDAsync(u.UserID);
-
-        if (photo?.Length == 0 || photo == null)
-        {
-            return null;
-        }
-
-        return photo;
-    }
-
-    public async Task<UserInfoDto?> RegisterNewUserAsync(RegisterDto request)
-    {
-        User? u = await this._repo.GetUserByUsernameAsync(request.Username);
-        UserInfoDto uidto = new UserInfoDto();
-
-        if (u != null)
-        {
-            uidto.ErrorMessage = "Username already taken";
-            return uidto;
-        }
-
-        User? nu = await this._repo.InsertUserAsync(request);
-
-        if (nu == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the user";
-            return uidto;
-        }
-
-        UserProfile? np = await this._repo.InsertProfileAsync(request);
-        
-        if (np == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the profile";
-            return uidto;
-        }
-
-        Cart? c = await this._repo.InsertCartAsync(nu.UserID);
-
-        if (c == null)
-        {
-            uidto.ErrorMessage = "There was an error creating the cart";
-            return uidto;
-        }
-        
-        uidto.UserID = nu.UserID;
-        uidto.Username = nu.Username;
-        uidto.ProfileID = np.ProfileID;
-        uidto.ProfileName = np.ProfileName;
-        uidto.ProfileAddress = np.ProfileAddress;
-        uidto.ProfilePhone = np.ProfilePhone;
-        uidto.ProfileEmail = np.ProfileEmail;
-        uidto.CartID = c.CartID;
-
-        if (np?.ProfilePicture?.Length > 0)
-        {
-            uidto.HasProfilePicture = true;
-        } 
-        else 
-        {
-            uidto.HasProfilePicture = false;
-        }
-
         return uidto;
     }
 
@@ -154,7 +62,7 @@ public class Bus : IBus
         return image;
     }
 
-    public async Task<Order?> CreateOrderAsync(Guid? userID)
+    public async Task<Order?> CreateOrderAsync(string? userID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
@@ -195,7 +103,7 @@ public class Bus : IBus
         return o;
     }
 
-    public async Task<List<Order?>> GetMyOrdersAsync(Guid? userID)
+    public async Task<List<Order?>> GetMyOrdersAsync(string? userID)
     {
         return await this._repo.GetMyOrdersAsync(userID);
     }
@@ -214,7 +122,7 @@ public class Bus : IBus
         return new SingleOrderDto(productList, o);
     }
 
-    public async Task<MyCartDto?> GetMyCartAsync(Guid? userID)
+    public async Task<MyCartDto?> GetMyCartAsync(string? userID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
         
@@ -228,25 +136,25 @@ public class Bus : IBus
         return new MyCartDto(productList, c);
     }
 
-    public async Task<MyCartDto?> AddProductToCartAsync(Guid? userID, Guid? productID)
+    public async Task<bool> AddProductToCartAsync(string? userID, Guid? productID)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
         if (c == null)
         {
-            return null;
+            return false;
         }
 
         Product? p = await this._repo.GetProductByProductIDAsync(productID);
 
         if (p == null)
         {
-            return null;
+            return false;
         }
 
         bool addedToCartSuccess = await this._repo.AddProductToCartAsync(c.CartID, productID);
 
-        return await GetMyCartAsync(userID);
+        return addedToCartSuccess;
     }
 
      public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr)
@@ -255,13 +163,6 @@ public class Bus : IBus
         Order? e = await this._repo.CreateNewOrderAsync(rr,id);
        
         return e;
-}
-     public async Task<User?> UpdateAccountDetailsAsync(User user )
-    {
-        Guid id = Guid.NewGuid();
-        User? aa = await this._repo.UpdateAccountDetailsAsync(user, id);
-        return aa;
-
     }
     public async Task<bool> UpdateProductImage(Stream file, Guid productId)
     {
@@ -276,5 +177,31 @@ public class Bus : IBus
         bool isSuccess = await this._repo.UpdateProductImage(photo, productId);
 
         return isSuccess;
+    }
+
+    public async Task<UserProfile?> UpdateUserInfoAsync(string? userID, UpdateUserInfoDto request)
+    {
+        if(request.Address == null && request.Phone == null)
+        {
+            return null;
+        }
+
+        if(request.Address != null)
+        {
+            if(await this._repo.UpdateUserAddressAsync(userID, request.Address))
+            {
+                return await this._repo.GetProfileByUserIDAsync(userID);
+            }
+        }
+        
+        if(request.Phone != null)
+        {
+            if(await this._repo.UpdateUserPhoneAsync(userID, request.Phone))
+            {
+                return await this._repo.GetProfileByUserIDAsync(userID);
+            }
+        }
+
+        return null;
     }
 }

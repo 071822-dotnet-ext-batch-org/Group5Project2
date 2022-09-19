@@ -1,3 +1,4 @@
+
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
@@ -27,10 +28,11 @@ import { AppComponent } from './app.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { HomeComponent } from './components/home/home.component';
-import { FormsComponent } from './components/forms/forms.component';
-
+import { MyCartComponent } from './components/my-cart/my-cart.component';
+import { baseURL } from './Services/base-url';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 
 @NgModule({
   declarations: [
@@ -38,9 +40,10 @@ import { FormsComponent } from './components/forms/forms.component';
     ProductListComponent,
     MyOrdersComponent,
     NavbarComponent,
-    DashboardComponent,
-    FormsComponent,
-    HomeComponent,
+    MyCartComponent,
+    ProfileComponent,
+    CheckoutComponent,
+    ProductCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,9 +69,16 @@ import { FormsComponent } from './components/forms/forms.component';
     AuthModule.forRoot({
       domain: 'dev-u4nrg-wp.us.auth0.com',
       clientId: 'XnuorVqaHw54eLqXctD3ddox70g2ddMD',
-      audience: 'http://localhost:7163',
+      audience: 'https://localhost:7231/Ecommerce',
       httpInterceptor: {
-        allowedList: ['https://localhost:7163/Ecommerce']
+        allowedList: [
+          baseURL + '/user',
+          baseURL + '/my-cart/addItem',
+          baseURL + '/my-cart',
+          baseURL + '/create-order',
+          baseURL + '/my-orders',
+          baseURL + '/my-orders/*'
+        ]
       }
     }),
   ],

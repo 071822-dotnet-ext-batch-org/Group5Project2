@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="card-container">
+        <app-product-card></app-product-card>
+    </div>
+    <div class="checkout-container">
+        <mat-card class="checkout-card">
+            <mat-card-title>
+                Total: {{checkoutTotal | currency}}
+                <button mat-raised-button color="primary" id="checkout-button" (click)="checkout()">Checkout</button>
+            </mat-card-title>
+        </mat-card>
+        <p>{{orderMessage}}</p>
+    </div>
+</div>

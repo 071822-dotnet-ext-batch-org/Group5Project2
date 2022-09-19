@@ -11,7 +11,7 @@ namespace Models
         {
         }
 
-        public Cart(Guid? cartID, decimal? cartTotal, int? cartItems, Guid? fk_UserID)
+        public Cart(Guid? cartID, decimal? cartTotal, int? cartItems, string? fk_UserID)
         {
             CartID = cartID;
             CartTotal = cartTotal;
@@ -22,6 +22,6 @@ namespace Models
         public Guid? CartID {get; set;}
         public decimal? CartTotal {get; set;}
         public int? CartItems {get; set;}
-        public Guid? Fk_UserID {get; set;}
+        public string? Fk_UserID {get; set;}
     }
 }

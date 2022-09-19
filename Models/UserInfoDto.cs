@@ -11,28 +11,29 @@ namespace Models
         {
         }
 
-        public UserInfoDto(Guid? userID, string? username, Guid? profileID, string? profileName, string? profileAddress, string? profilePhone, string? profileEmail, Guid? cartID, bool? hasProfilePicture)
+        public UserInfoDto(
+            string? profileName, 
+            string? profileAddress, 
+            string? profilePhone, 
+            string? profileEmail, 
+            Cart? cart, 
+            string? profilePicture
+        )
         {
-            UserID = userID;
-            Username = username;
-            ProfileID = profileID;
             ProfileName = profileName;
             ProfileAddress = profileAddress;
             ProfilePhone = profilePhone;
             ProfileEmail = profileEmail;
-            HasProfilePicture = hasProfilePicture;
-            CartID = cartID;
+            ProfilePicture = profilePicture;
+            Cart = cart;
         }
 
-        public Guid? UserID {get; set;}
-        public string? Username {get; set;}
-        public Guid? ProfileID {get; set;}
         public string? ProfileName {get; set;}
         public string? ProfileAddress {get; set;}
         public string? ProfilePhone {get; set;}
         public string? ProfileEmail {get; set;}
-        public bool? HasProfilePicture {get; set;} 
-        public Guid? CartID {get; set;} 
+        public string? ProfilePicture {get; set;} 
+        public Cart? Cart {get; set;} 
         public string? ErrorMessage {get; set;} = string.Empty;
     }
 }

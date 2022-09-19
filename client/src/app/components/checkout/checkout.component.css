@@ -1,0 +1,27 @@
+.container {
+    margin: 100px;
+}
+
+.card-container {
+    width: 50%;
+    float: left;
+    
+}
+
+.checkout-container {
+    width: 50%;
+    float: right;
+    margin: 10px auto;
+}
+
+.checkout-card {
+    height: 38px;
+}
+
+.product-img {
+    object-fit: cover;
+}
+
+#checkout-button {
+    float: right;
+}

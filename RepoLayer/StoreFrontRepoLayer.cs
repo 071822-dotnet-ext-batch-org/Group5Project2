@@ -218,7 +218,7 @@ namespace RepoLayer
                     u.ProfileEmail = ret.GetString(4);
 
                     byte[] userImagebyte = (byte[])ret["ProfilePicture"];
-                    u.ProfilePicture = userImagebyte;
+                    u.ProfilePicture = string.Empty;
                     u.ProfileID = ret.GetGuid(6);
                     
                     conn.Close();
@@ -312,22 +312,7 @@ namespace RepoLayer
             }
 
         }
-        public async Task<User?> UpdateAccountDetailsAsync(User user, Guid userId) 
-        {
-            using (SqlCommand command = new SqlCommand("UPDATE Users SET UserID = @userID, UserName = @userName, userPassword = @UserPasswod", conn))
-            {
-                command.Parameters.AddWithValue("@userID", userId);
-                command.Parameters.AddWithValue("@userName", user.Username);
-                command.Parameters.AddWithValue("@userPassword", user.Password);
-                conn.Open();
-                int ret = await command.ExecuteNonQueryAsync();
-                conn.Close();
-                if (ret < 1) return null;
 
-                return user;
-
-            }
-        }
             public async Task<bool> UpdateProductImage(byte[] photo, Guid ProductID)
         {
             using SqlCommand command = new SqlCommand("UPDATE [dbo].[Products] SET ProductImage = @ProductImage WHERE ProductID = @productId", conn);
