@@ -312,7 +312,7 @@ public class Repo : IRepo
     public async Task<bool> DeleteAllItemsFromCartByCartIDAsync(Guid? cartID)
     {
         string sql1 = $"DELETE FROM CartsProducts WHERE fk_cartID = @cartID";
-        string sql2 = $"UPDATE Carts SET cartItems = 0 WHERE cartID = @cartID";
+        string sql2 = $"UPDATE Carts SET cartItems = 0, cartTotal = 0 WHERE cartID = @cartID";
         bool ret1 = false;
         bool ret2 = false;
 
