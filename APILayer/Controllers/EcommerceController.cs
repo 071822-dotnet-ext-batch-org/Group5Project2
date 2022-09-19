@@ -169,5 +169,7 @@ namespace APILayer.Controllers
         // TODO: Fix cartItems = Count how many products in CartsProducts by cartID
         // TODO: Fix orders, add orderItems = ^ in OrdersProducts by orderID
         // use triggers?
+        // TODO: fix cart total in database (reading 0 when items are added)
+        // TODO: fix my orders page to make the cards say count and total
     }
 }

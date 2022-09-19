@@ -339,7 +339,7 @@ public class Repo : IRepo
 
     public async Task<List<Order?>> GetMyOrdersAsync(string? userID)
     {
-        string sql = $"SELECT * FROM Orders WHERE fk_userID = @userID";
+        string sql = $"SELECT * FROM Orders WHERE fk_userID = @userID ORDER BY dateOrdered DESC";
         List<Order?> orderList = new List<Order?>();
 
         using (SqlCommand command = new SqlCommand(sql, _conn))
@@ -406,7 +406,7 @@ public class Repo : IRepo
     public async Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID)
     {
         string sql1 = $"INSERT INTO CartsProducts (fk_cartID, fk_productID) VALUES (@cartID, @productID)";
-        string sql2 = $"UPDATE Carts SET cartItems = cartItems + 1 WHERE cartID = @cartID";
+        string sql2 = $"UPDATE Carts SET cartItems = cartItems + 1, cartTotal = cartTotal + (SELECT productPrice FROM Products WHERE productID = @productID) WHERE cartID = @cartID";
         bool ret1 = false;
         bool ret2 = false;
         
@@ -423,6 +423,7 @@ public class Repo : IRepo
         using (SqlCommand command = new SqlCommand(sql2, _conn))
         {
             command.Parameters.AddWithValue("@cartID", cartID);
+            command.Parameters.AddWithValue("@productID", productID);
 
             _conn.Open();
             ret2 = (await command.ExecuteNonQueryAsync()) > 0;

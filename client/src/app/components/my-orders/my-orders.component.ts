@@ -40,11 +40,20 @@ export class MyOrdersComponent implements OnInit {
     
    //Display all ordered products by ID
   displayOrderedProducts(orderID : any) : void {
+    this.products = [];
 
     this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
       this.orderproduct = data;
-      this.products = data.products
-      console.log(this.orderproduct);
+      data.products.forEach(product=>{
+        const result = this.products.find(p=>p.productID === product.productID)
+        if(result != undefined){
+          result.count++
+        } else {
+          product.count = 1;
+          this.products.push(product);
+        }
+      });
+      console.log(this.products);
   })
  }
   
