@@ -114,14 +114,14 @@ namespace APILayer.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest("There was an error with the model");
             }
 
             SingleOrderDto? o = await this._bus.GetOrderAsync(orderID);
 
             if (o == null)
             {
-                return Unauthorized("Unable to find order");
+                return BadRequest("Unable to find order");
             }
 
             return Ok(o);
@@ -145,7 +145,7 @@ namespace APILayer.Controllers
 
         [HttpPost("my-cart/addItem")]
         [Authorize]
-        public async Task<ActionResult<bool>> AddProductToCartAsync(Guid? productID)
+        public async Task<ActionResult<Cart?>> AddProductToCartAsync(Guid? productID, int count)
         {
             if(!ModelState.IsValid)
             {
@@ -154,9 +154,30 @@ namespace APILayer.Controllers
 
             string? auth0id = User.Identity?.Name;
 
-            bool c = await this._bus.AddProductToCartAsync(auth0id, productID);
+            Cart? c = await this._bus.AddProductToCartAsync(auth0id, productID, count);
 
-            if (c==false)
+            if (c==null)
+            {
+                return BadRequest(c);
+            }
+
+            return Ok(c);
+        }
+
+        [HttpPost("my-cart/deleteItem")]
+        [Authorize]
+        public async Task<ActionResult<Cart?>> DeleteProductFromCartAsync(Guid? productID, int count)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            string? auth0id = User.Identity?.Name;
+
+            Cart? c = await this._bus.DeleteProductFromCartAsync(auth0id, productID, count);
+
+            if (c==null)
             {
                 return BadRequest(c);
             }

@@ -19,6 +19,8 @@ export class MyOrdersComponent implements OnInit {
   orderID!: any;
   orderproduct!: OrderedProducts;
   products: Product[] = [];
+  loading: boolean = false;
+  errorMessage: string = "";
   
   constructor(private EcommerceAPI: ProductListService) { }
 
@@ -41,20 +43,28 @@ export class MyOrdersComponent implements OnInit {
    //Display all ordered products by ID
   displayOrderedProducts(orderID : any) : void {
     this.products = [];
+    this.loading = true;
 
-    this.EcommerceAPI.getOrdersById(orderID).subscribe(data => {
-      this.orderproduct = data;
-      data.products.forEach(product=>{
-        const result = this.products.find(p=>p.productID === product.productID)
-        if(result != undefined){
-          result.count++
-        } else {
-          product.count = 1;
-          this.products.push(product);
-        }
-      });
-      console.log(this.products);
-  })
- }
+    this.EcommerceAPI.getOrdersById(orderID).subscribe({
+      next: data => {
+        this.orderproduct = data;
+        data.products.forEach(product=>{
+          const result = this.products.find(p=>p.productID === product.productID)
+          if(result != undefined){
+            result.count++
+          } else {
+            product.count = 1;
+            this.products.push(product);
+          }
+        });
+        console.log(this.products); 
+        this.loading = false;
+      },
+      error: err => {
+        this.loading = false;
+        this.errorMessage = "There was an error retrieving the product data";
+      }
+    })
+  }
   
 }

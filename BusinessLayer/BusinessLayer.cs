@@ -136,25 +136,56 @@ public class Bus : IBus
         return new MyCartDto(productList, c);
     }
 
-    public async Task<bool> AddProductToCartAsync(string? userID, Guid? productID)
+    public async Task<Cart?> AddProductToCartAsync(string? userID, Guid? productID, int count)
     {
         Cart? c = await this._repo.GetCartByUserIDAsync(userID);
 
         if (c == null)
         {
-            return false;
+            return null;
         }
 
         Product? p = await this._repo.GetProductByProductIDAsync(productID);
 
         if (p == null)
         {
-            return false;
+            return null;
         }
 
-        bool addedToCartSuccess = await this._repo.AddProductToCartAsync(c.CartID, productID);
+        bool addedToCartSuccess = await this._repo.AddProductToCartAsync(c.CartID, productID, count);
 
-        return addedToCartSuccess;
+        if(!addedToCartSuccess)
+        {
+            return null;
+        }
+
+        return await this._repo.GetCartByUserIDAsync(userID);
+    }
+
+    public async Task<Cart?> DeleteProductFromCartAsync(string? userID, Guid? productID, int count)
+    {
+        Cart? c = await this._repo.GetCartByUserIDAsync(userID);
+
+        if (c == null)
+        {
+            return null;
+        }
+
+        Product? p = await this._repo.GetProductByProductIDAsync(productID);
+
+        if (p == null)
+        {
+            return null;
+        }
+
+        bool deletedFromCartSuccess = await this._repo.DeleteProductFromCartAsync(c.CartID, productID, count);
+
+        if(!deletedFromCartSuccess)
+        {
+            return null;
+        }
+
+        return await this._repo.GetCartByUserIDAsync(userID);
     }
 
      public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr)

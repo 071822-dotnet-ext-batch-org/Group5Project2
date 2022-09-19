@@ -22,7 +22,6 @@ export class NavbarComponent {
   
   myName: any;
   cartItems: number = 0;
-  private cartSub: Subscription;
 
   ngOnInit(): void {
     this.auth.isAuthenticated$.subscribe(authenticated => {
@@ -42,7 +41,10 @@ export class NavbarComponent {
     private UIS: GetUserInfoService,
     private DSS: DataSharingService
   ) {
-    this.cartSub = this.DSS.getUpdatedCart().subscribe(items => this.cartItems=items)
+    this.DSS.getUpdatedCart().subscribe(items => {
+      console.log(items)
+      this.cartItems=items
+    })
   }
 
   login():void {

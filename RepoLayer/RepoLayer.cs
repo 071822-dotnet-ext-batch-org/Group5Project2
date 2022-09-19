@@ -403,34 +403,91 @@ public class Repo : IRepo
         }
     }
 
-    public async Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID)
+    public async Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID, int count)
     {
         string sql1 = $"INSERT INTO CartsProducts (fk_cartID, fk_productID) VALUES (@cartID, @productID)";
-        string sql2 = $"UPDATE Carts SET cartItems = cartItems + 1, cartTotal = cartTotal + (SELECT productPrice FROM Products WHERE productID = @productID) WHERE cartID = @cartID";
+        string sql2 = $"UPDATE Carts SET cartItems = cartItems + @count, cartTotal = cartTotal + ((SELECT productPrice FROM Products WHERE productID = @productID)*@count) WHERE cartID = @cartID";
         bool ret1 = false;
         bool ret2 = false;
-        
-        using (SqlCommand command = new SqlCommand(sql1, _conn))
-        {
-            command.Parameters.AddWithValue("@cartID", cartID);
-            command.Parameters.AddWithValue("@productID", productID);
 
-            _conn.Open();
-            ret1 = (await command.ExecuteNonQueryAsync()) > 0;
-            _conn.Close();
+        for (int i = 0; i < count; i++) 
+        {
+            using (SqlCommand command = new SqlCommand(sql1, _conn))
+            {
+                command.Parameters.AddWithValue("@cartID", cartID);
+                command.Parameters.AddWithValue("@productID", productID);
+
+                _conn.Open();
+                ret1 = (await command.ExecuteNonQueryAsync()) > 0;
+                _conn.Close();
+
+                if(ret1 == false) 
+                {
+                    return false;
+                }
+            }
         }
 
         using (SqlCommand command = new SqlCommand(sql2, _conn))
         {
             command.Parameters.AddWithValue("@cartID", cartID);
             command.Parameters.AddWithValue("@productID", productID);
+            command.Parameters.AddWithValue("@count", count);
+
 
             _conn.Open();
             ret2 = (await command.ExecuteNonQueryAsync()) > 0;
             _conn.Close();
+
+            if(ret2 == false)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    public async Task<bool> DeleteProductFromCartAsync(Guid? cartID, Guid? productID, int count)
+    {
+        string sql1 = $"DELETE TOP(@count) FROM CartsProducts WHERE fk_cartID=@cartID AND fk_productID=@productID";
+        string sql2 = $"UPDATE Carts SET cartItems = cartItems - @count, cartTotal = cartTotal - ((SELECT productPrice FROM Products WHERE productID = @productID)*@count) WHERE cartID = @cartID";
+        bool ret1 = false;
+        bool ret2 = false;
+
+        using (SqlCommand command = new SqlCommand(sql1, _conn))
+        {
+            command.Parameters.AddWithValue("@cartID", cartID);
+            command.Parameters.AddWithValue("@productID", productID);
+            command.Parameters.AddWithValue("@count", count);
+
+            _conn.Open();
+            ret1 = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+
+            if(ret1 == false) 
+            {
+                return false;
+            }
         }
 
-        return ret1 && ret2;
+        using (SqlCommand command = new SqlCommand(sql2, _conn))
+        {
+            command.Parameters.AddWithValue("@cartID", cartID);
+            command.Parameters.AddWithValue("@productID", productID);
+            command.Parameters.AddWithValue("@count", count);
+
+            _conn.Open();
+            ret2 = (await command.ExecuteNonQueryAsync()) > 0;
+            _conn.Close();
+
+            if(ret2 == false)
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     public async Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id)

@@ -22,7 +22,8 @@ namespace RepoLayer
         Task<bool> DeleteAllItemsFromCartByCartIDAsync(Guid? cartID);
         Task<List<Order?>> GetMyOrdersAsync(string? userID);
         Task<List<Product?>> GetProductsInOrderAsync(Guid? orderID);
-        Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID);
+        Task<bool> AddProductToCartAsync(Guid? cartID, Guid? productID, int count);
+        Task<bool> DeleteProductFromCartAsync(Guid? cartID, Guid? productID, int count);
         Task<Order?> CreateNewOrderAsync(UpdateNewOrderDto rr, Guid id);
         Task<Products?> UpdateProductImage(Guid productId);
         Task<bool> UpdateProductImage(byte[] photo, Guid productId);

@@ -1,6 +1,9 @@
 <div class="container">
-    <div class="card-container">
-        <app-product-card></app-product-card>
+    <div class="card-container" >
+        <mat-progress-spinner class="product-loading" mode="indeterminate" *ngIf="loadingProducts"></mat-progress-spinner>
+        <div *ngFor="let product of products">
+            <app-product-card [product]="product" (displayCart)="displayCart()"></app-product-card>
+        </div>
     </div>
     <div class="checkout-container">
         <mat-card class="checkout-card">
@@ -9,6 +12,8 @@
                 <button mat-raised-button color="primary" id="checkout-button" (click)="checkout()">Checkout</button>
             </mat-card-title>
         </mat-card>
-        <p>{{orderMessage}}</p>
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+        <h1>{{orderMessage}}</h1>
     </div>
 </div>

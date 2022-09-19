@@ -16,7 +16,8 @@ namespace BusinessLayer
         Task<List<Order?>> GetMyOrdersAsync(string? userID);
         Task<SingleOrderDto?> GetOrderAsync(Guid? orderID);
         Task<MyCartDto?> GetMyCartAsync(string? userID);
-        Task<bool> AddProductToCartAsync(string? userID, Guid? productID);
+        Task<Cart?> AddProductToCartAsync(string? userID, Guid? productID, int count);
+        Task<Cart?> DeleteProductFromCartAsync(string? userID, Guid? productID, int count);
         Task<UserProfile?> UpdateUserInfoAsync(string? userID, UpdateUserInfoDto request);
     }
 }

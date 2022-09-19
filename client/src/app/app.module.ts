@@ -23,6 +23,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 import { AppComponent } from './app.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
@@ -66,6 +68,8 @@ import { ProductCardComponent } from './components/product-card/product-card.com
     MatSidenavModule,
     MatListModule,
     MatRadioModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     AuthModule.forRoot({
       domain: 'dev-u4nrg-wp.us.auth0.com',
       clientId: 'XnuorVqaHw54eLqXctD3ddox70g2ddMD',
@@ -74,6 +78,7 @@ import { ProductCardComponent } from './components/product-card/product-card.com
         allowedList: [
           baseURL + '/user',
           baseURL + '/my-cart/addItem',
+          baseURL + '/my-cart/deleteItem',
           baseURL + '/my-cart',
           baseURL + '/create-order',
           baseURL + '/my-orders',

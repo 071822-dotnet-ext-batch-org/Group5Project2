@@ -6,3 +6,8 @@
 .card-footer {
     text-align: center;
 }
+
+#count-field {
+    width: 100px;
+    margin-top: 20px;
+}

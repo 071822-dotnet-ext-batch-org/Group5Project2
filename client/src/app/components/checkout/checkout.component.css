@@ -25,3 +25,7 @@
 #checkout-button {
     float: right;
 }
+
+.product-loading {
+    margin: auto;
+}

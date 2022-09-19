@@ -27,6 +27,9 @@
 </ul>
 </div>
  
+<mat-progress-spinner *ngIf="loading" mode="indeterminate" class="loading-spinner"></mat-progress-spinner>
+
+<h1 class="error-message">{{this.errorMessage}}</h1>
 
 <div class="displayorder" *ngIf="products.length > 0">  
   <mat-card class="product-cards" *ngFor="let product of products">
