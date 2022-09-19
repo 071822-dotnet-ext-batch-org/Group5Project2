@@ -28,7 +28,7 @@
 </div>
  
 
-<div class="displayorder">  
+<div class="displayorder" *ngIf="products.length > 0">  
   <mat-card class="product-cards" *ngFor="let product of products">
     <mat-card-title-group>
         <mat-card-title>
@@ -40,7 +40,12 @@
         <img mat-card-sm-image src="https://localhost:7231/Ecommerce/product/{{product.productID}}/image" class="product-image">
     </mat-card-title-group>
     <mat-card-content>
-        {{product.productDetails}}
+        <p>
+          {{product.productDetails}}
+        </p>
+        <p>
+          Count: {{product.count}}
+        </p>
     </mat-card-content>
     <mat-divider></mat-divider>
   </mat-card>

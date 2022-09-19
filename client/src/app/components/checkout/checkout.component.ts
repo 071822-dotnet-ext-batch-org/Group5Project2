@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/Models/Product';
 import { CheckoutService } from 'src/app/Services/checkout/checkout.service';
 import { DataSharingService } from 'src/app/Services/data-sharing/data-sharing.service';
-import { GetMyCartService } from 'src/app/Services/get-my-cart/get-my-cart.service';
 
 @Component({
   selector: 'app-checkout',
@@ -11,7 +9,6 @@ import { GetMyCartService } from 'src/app/Services/get-my-cart/get-my-cart.servi
 })
 export class CheckoutComponent implements OnInit {
 
-  products: Product[] = [];
   checkoutTotal: number = 0;
   orderMessage: any;
 
@@ -29,7 +26,7 @@ export class CheckoutComponent implements OnInit {
   checkout(): void {
     this.CHK.checkout().subscribe(data => this.orderMessage=data.message)
     this.checkoutTotal = 0;
-    this.products = [];
+    this.DSS.updateCheckoutProducts([]);
     this.DSS.updateCart(0);
   }
 

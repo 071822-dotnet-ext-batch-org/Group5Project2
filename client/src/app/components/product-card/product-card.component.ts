@@ -16,7 +16,9 @@ export class ProductCardComponent implements OnInit {
   constructor(
     private GMC: GetMyCartService,
     private DSS: DataSharingService
-  ) { }
+  ) { 
+    this.DSS.getUpdatedCheckoutProducts().subscribe(updateProducts => this.products = updateProducts);
+  }
 
   ngOnInit(): void {
     this.displayCart();
@@ -34,13 +36,11 @@ export class ProductCardComponent implements OnInit {
           this.products.push(product);
         }
 
-        console.log(product.productPrice);
-
-        this.checkoutTotal += product.productPrice;
       });
       
+      this.checkoutTotal = data.cart.cartTotal
       this.DSS.updateCheckoutTotal(this.checkoutTotal);
-    
+      
     })
   }
 

@@ -30,3 +30,9 @@
 .orderclick{
     cursor: pointer;
 }
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
