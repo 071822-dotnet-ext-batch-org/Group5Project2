@@ -1,23 +1,20 @@
-using BusinessLayer;
-using Microsoft.AspNetCore.Http;
+
 using Models;
 using RepoLayer;
-using System.Drawing;
-
 
 namespace Tests.StoreFrontAPI
 {
-    public class StoreFrontAPITests
+    public class ModelsTests
     {
         private readonly StoreFrontRepoLayer _repoLayer;
 
-        public StoreFrontAPITests()
+        public ModelsTests()
         {
             this._repoLayer = new StoreFrontRepoLayer();
         }
 
 
-        [Test]
+        [Fact]
         public void ProductsInsertWorksCorrectly()
         {
             //Arrange
@@ -38,13 +35,13 @@ namespace Tests.StoreFrontAPI
 
             //Assert
 
-            Assert.AreEqual(newproduct.ProductID, guid);
+            Assert.Equal(newproduct.ProductID, guid);
 
         }
 
 
 
-        [Test]
+        [Fact]
         public void InsertproductCartsWorksCorrectly()
         {
             //Arrange
@@ -64,7 +61,7 @@ namespace Tests.StoreFrontAPI
 
             //Assert
 
-            Assert.AreEqual(newcartproduct.CartsProductsID, guid);
+            Assert.Equal(newcartproduct.CartsProductsID, guid);
 
         }
 
@@ -72,7 +69,7 @@ namespace Tests.StoreFrontAPI
 
 
 
-        [Test]
+        [Fact]
         public void InsertNewUserWorksCorrectly()
         {
             //Arrange
@@ -96,38 +93,9 @@ namespace Tests.StoreFrontAPI
 
             //Assert
 
-            Assert.AreEqual(newuser.ProfileID, guid);
+            Assert.Equal(newuser.ProfileID, guid);
 
         }
-
-
-
-
-        [Test]
-        public async Task ProductsWorksCorrectly()
-        {
-            //Arrange
-            Guid guid = Guid.NewGuid();
-
-            Mock_RepoLayer m = new Mock_RepoLayer();
-
-            ProductsBusinessLayer pBL = new ProductsBusinessLayer();
-
-            Products product = new Products();
-
-
-
-            //Act
-
-            List<ProductDto?> productList = await pBL.GetAllProductsAsync();
-
-
-            //Assert
-
-            Assert.IsTrue(true);
-
-        }
-
 
 
     }
